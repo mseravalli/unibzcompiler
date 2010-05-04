@@ -48,6 +48,28 @@ assignment_expression
 	: IDENTIFIER '=' assignment_expression
 	; 
 
+expression
+	: assignment_expression
+	;	
+
+
+expression_statement
+	: ';'
+	| expression ';'
+	;
+
+
+
+statement
+	: compound_statement
+	| expression_statement
+	;
+
+
+statement_list
+	: statement
+	| statement_list statement
+	;
 
 compound_statement
 	: '{' '}'
