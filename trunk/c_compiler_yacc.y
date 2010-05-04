@@ -23,6 +23,7 @@ identifier_list
 	| identifier_list ',' IDENTIFIER
 	;
 
+
 type_specifier
 	: VOID
 	| CHAR
@@ -50,6 +51,7 @@ assignment_expression
 
 expression
 	: assignment_expression
+	/*| expression ',' assignment_expression nell'originale ci sarebbe anche questo solo che non capisco a cosa può servire e per ora lo commento*/
 	;	
 
 
@@ -71,11 +73,13 @@ statement_list
 	| statement_list statement
 	;
 
+
+/*praticamente sono i blocchi*/
 compound_statement
 	: '{' '}'
-	/*| '{' statement_list '}'*/
+	| '{' statement_list '}'
 	| '{' declaration_list '}'
-	/*| '{' declaration_list statement_list '}'*/
+	| '{' declaration_list statement_list '}'
 	;
 
 parameter_declaration
@@ -95,6 +99,7 @@ direct_declarator
 	: IDENTIFIER
 	/*| direct_declarator '(' parameter_type_list ')' questo sarebbe l'originale*/
 	| IDENTIFIER '(' parameter_list ')'
+	| IDENTIFIER '(' identifier_list ')' /* forse questo serve quando una funzione  */
 	;
 
 
