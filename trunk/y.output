@@ -1,0 +1,210 @@
+   0  $accept : scope $end
+
+   1  scope : main
+
+   2  main : HALLO body PFIATI
+
+   3  body : statements ';'
+
+   4  statements : declaration
+   5             | assignment
+
+   6  declaration : unary_declaration
+   7              | multiple_declaration
+
+   8  unary_declaration : type_specifier ID
+
+   9  multiple_declaration : type_specifier ID id_sequence
+
+  10  id_sequence :
+  11              | ID
+  12              | id_sequence
+
+  13  type_specifier : GENAU
+  14                 | GANZ
+
+  15  assignment : ID ISCH NUM
+  16             | unary_declaration ISCH NUM
+
+state 0
+	$accept : . scope $end  (0)
+
+	HALLO  shift 1
+	.  error
+
+	scope  goto 2
+	main  goto 3
+
+
+state 1
+	main : HALLO . body PFIATI  (2)
+
+	ID  shift 4
+	GENAU  shift 5
+	GANZ  shift 6
+	.  error
+
+	body  goto 7
+	statements  goto 8
+	declaration  goto 9
+	assignment  goto 10
+	unary_declaration  goto 11
+	multiple_declaration  goto 12
+	type_specifier  goto 13
+
+
+state 2
+	$accept : scope . $end  (0)
+
+	$end  accept
+
+
+state 3
+	scope : main .  (1)
+
+	.  reduce 1
+
+
+state 4
+	assignment : ID . ISCH NUM  (15)
+
+	ISCH  shift 14
+	.  error
+
+
+state 5
+	type_specifier : GENAU .  (13)
+
+	.  reduce 13
+
+
+state 6
+	type_specifier : GANZ .  (14)
+
+	.  reduce 14
+
+
+state 7
+	main : HALLO body . PFIATI  (2)
+
+	PFIATI  shift 15
+	.  error
+
+
+state 8
+	body : statements . ';'  (3)
+
+	';'  shift 16
+	.  error
+
+
+state 9
+	statements : declaration .  (4)
+
+	.  reduce 4
+
+
+state 10
+	statements : assignment .  (5)
+
+	.  reduce 5
+
+
+state 11
+	declaration : unary_declaration .  (6)
+	assignment : unary_declaration . ISCH NUM  (16)
+
+	ISCH  shift 17
+	';'  reduce 6
+
+
+state 12
+	declaration : multiple_declaration .  (7)
+
+	.  reduce 7
+
+
+state 13
+	unary_declaration : type_specifier . ID  (8)
+	multiple_declaration : type_specifier . ID id_sequence  (9)
+
+	ID  shift 18
+	.  error
+
+
+state 14
+	assignment : ID ISCH . NUM  (15)
+
+	NUM  shift 19
+	.  error
+
+
+state 15
+	main : HALLO body PFIATI .  (2)
+
+	.  reduce 2
+
+
+state 16
+	body : statements ';' .  (3)
+
+	.  reduce 3
+
+
+state 17
+	assignment : unary_declaration ISCH . NUM  (16)
+
+	NUM  shift 20
+	.  error
+
+
+18: reduce/reduce conflict (reduce 8, reduce 10) on ';'
+state 18
+	unary_declaration : type_specifier ID .  (8)
+	multiple_declaration : type_specifier ID . id_sequence  (9)
+	id_sequence : .  (10)
+
+	ID  shift 21
+	ISCH  reduce 8
+	';'  reduce 8
+
+	id_sequence  goto 22
+
+
+state 19
+	assignment : ID ISCH NUM .  (15)
+
+	.  reduce 15
+
+
+state 20
+	assignment : unary_declaration ISCH NUM .  (16)
+
+	.  reduce 16
+
+
+state 21
+	id_sequence : ID .  (11)
+
+	.  reduce 11
+
+
+22: reduce/reduce conflict (reduce 9, reduce 12) on ';'
+state 22
+	multiple_declaration : type_specifier ID id_sequence .  (9)
+	id_sequence : id_sequence .  (12)
+
+	.  reduce 9
+
+
+Rules never reduced:
+	id_sequence :  (10)
+	id_sequence : id_sequence  (12)
+
+
+State 18 contains 1 reduce/reduce conflict.
+State 22 contains 1 reduce/reduce conflict.
+
+
+10 terminals, 11 nonterminals
+17 grammar rules, 23 states
