@@ -9,6 +9,7 @@ conditional : IF '(' expression ')' THEN statement DONE
             ;
 
 else        : ELSE statement
+            | else
             |
             ;
 
