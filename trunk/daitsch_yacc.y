@@ -2,49 +2,41 @@
 %start scope
 %%
 
-scope
-	: main
-	;
+scope           : main
+                ;
 
-main
-	: HALLO body PFIATI
-	;
+main            : HALLO body PFIATI
+                ;
 
-body
-	: statements ';'
-	;
+body            : statements ';'
+	            ;
 
-statements
-	: declaration
-	| assignment
-	;
+statements      : declaration
+	            | assignment
+	            ;
 
 declaration
-	: unary_declaration
-	| multiple_declaration
-	;
+	            : unary_declaration
+	            | multiple_declaration
+	            ;
 
 unary_declaration
-	: type_specifier ID
-	;
+                : type_specifier ID
+                ;
 
 multiple_declaration
-	: type_specifier ID id_sequence
-	;
+                : type_specifier ID id_sequence
+                ;
 
-id_sequence
-	: 
-	| , ID
-	| id_sequence
-	;
+id_sequence     : 
+                | , ID
+                | id_sequence
+                ;
 
-type_specifier
-	: GENAU
-	| GANZ
-	;
+type_specifier  : GENAU
+                | GANZ
+                ;
 
-assignment
-	: ID ISCH NUM
-	| unary_declaration ISCH NUM
-	;
-
+assignment      : ID ISCH NUM
+                | unary_declaration ISCH NUM
+                ;
