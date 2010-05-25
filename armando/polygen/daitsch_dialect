@@ -5,7 +5,7 @@ S ::=       "wenn (" Expression ") nor" Ending
 Ending ::= Statement "passt";
 
 Else ::=    " Else" Statement
-            | Else
+            | " Else" Statement Else
             | _
             ;
 
