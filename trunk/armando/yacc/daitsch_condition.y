@@ -12,7 +12,7 @@ ending                  : statement DONE
                         ;
 
 else                    : ELSE statement
-                        | else
+                        | ELSE statement else
                         |
                         ;
 
