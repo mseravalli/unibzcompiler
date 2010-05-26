@@ -16,12 +16,8 @@ else                    : ELSE_IF statement
                         |
                         ;
 
-loop                    :
-                        ;
-
 expression              :
                         ;
 
 statement               : conditional
-                        | loop
                         ;
