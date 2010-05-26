@@ -16,8 +16,8 @@ MULTIC "/*"([^/]|"/"[^*])*"*/"
 /* Contitional statement */
 IF wenn
 THEN nor
-ELSE oder
-LAST_ELIF sunscht
+ELSE_IF oder wenn
+ELSE sunscht
 
 /* Loop statement */
 WHILE solang
