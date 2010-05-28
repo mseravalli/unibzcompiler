@@ -19,7 +19,8 @@ Else ::=        "oder wenn" Statement Else
 
 Expression ::=  " -- expr -- ";
 
-Statement ::=   Condition
+Statement ::=   Statement Statement
+                | Condition
                 | Whileloop
                 |_
                 ;
