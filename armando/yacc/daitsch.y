@@ -1,11 +1,12 @@
 %{
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 %}
 
 %token HALLO PFIATI
-%token ID GENAU GANZ NUM
+%token ID INT FLOAT VOID NUM
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE
 %start Program 
