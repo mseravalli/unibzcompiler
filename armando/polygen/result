@@ -1,0 +1,27 @@
+solong (  -- expr --  )
+    tua {
+
+    wenn (  -- expr --  ) nor {
+            solong (  -- expr --  ) tua {
+                -- single line -- 
+            } passt
+
+    } sunscht {
+        wenn (  -- expr --  ) nor {
+            wenn (  -- expr --  ) nor { } passt
+        } passt
+    } passt
+
+} passt
+
+
+--> examples of generation (without braces)
+--> 1.
+hallo
+    wenn (  -- expr --  ) nor
+        solong (  -- expr --  ) tua
+        passt
+    passt
+pfiatti
+
+--> 2.
