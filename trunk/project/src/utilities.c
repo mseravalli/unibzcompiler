@@ -10,4 +10,6 @@
  *                                                                            *
  ******************************************************************************/
 
+#include "headers.h"
 
+sym_node *table_head = NULL;        // haad of the symbol table (list imp.)

@@ -10,6 +10,10 @@
  *                                                                            *
  ******************************************************************************/
 
-typedef struct sym_job {
-    sym_job* next;
-} sym_job;
+typedef struct sym_node {
+    sym_node* next;
+    char *token;
+    char *lexeme;
+    int type;           // 0 == ganz
+                        // 1 == genau
+} sym_node;
