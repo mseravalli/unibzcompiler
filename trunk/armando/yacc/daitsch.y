@@ -1,50 +1,45 @@
-%token HALLO PFIATI ID GENAU GANZ ISCH NUM
-%start scope
+%{
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+%}
+
+%token HALLO PFIATI
+%token ID GENAU GANZ NUM
+%token IF THEN ELIF ELSE
+%token WHILE DO DONE
+%start Program 
 %%
 
-scope
-	: main
-	;
+Program             : Main     {printf("OK..\n"); exit(0);}
+                    ;
 
-main
-	: HALLO body PFIATI
-	;
+Main                : HALLO Statements PFIATI
+                    ;
 
-body
-	: statements ';'
-	;
+Statements          : /* nothing */
+                    | Statements Statements
+	                | Conditions
+	                | Whileloop
+	                ;
 
-statements
-	: declaration
-	| assignment
-	;
+Conditions          : IF '(' Expressions ')' THEN Ending
+                    | IF '(' Expressions ')' THEN Statements Else ELSE Ending
+                    ;
 
-declaration
-	: unary_declaration
-	| multiple_declaration
-	;
+Whileloop           : WHILE '(' Expressions ')' DO Ending
+                    ;
 
-unary_declaration
-	: type_specifier ID
-	;
+Ending              : Statements DONE;
 
-multiple_declaration
-	: type_specifier ID id_sequence
-	;
+Else                : /* nothing */
+                    | ELIF Statements Else
+                    ;
 
-id_sequence
-	: 
-	| , ID
-	| id_sequence
-	;
+Expressions         : '--expr--'
+                    ;
 
-type_specifier
-	: GENAU
-	| GANZ
-	;
+%%
 
-assignment
-	: ID ISCH NUM
-	| unary_declaration ISCH NUM
-	;
+#include "../lex/lex.daitsch.c"
 

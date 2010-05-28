@@ -1,7 +1,7 @@
 %option noyywrap
 %{
-#include <stdio.h>
-int TokenCont=0;
+#include <stdlib.h>
+#include <string.h>
 %}
 
 DIGIT [0-9]
@@ -16,7 +16,7 @@ MULTIC "/*"([^/]|"/"[^*])*"*/"
 /* Contitional statement */
 IF wenn
 THEN nor
-ELSE_IF oder wenn
+ELIF oder wenn
 ELSE sunscht
 
 /* Loop statement */
@@ -29,31 +29,31 @@ INT ganz
 FLOAT float
 VOID nichts
 
-
 /* C-others */
 STRING \".*\"
 IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
 
 %%
+
 [ \t\n] { /* discarded characters */ }
 
-{IF} { printf( "Keyword: %s\n", yytext); }
-{THEN} { printf( "Keyword: %s\n", yytext); }
-{ELSE} { printf( "Keyword: %s\n", yytext); }
-{LAST_ELIF} { printf( "Keyword: %s\n", yytext); }
+{IF} { return IF; }
+{THEN} { return THEN; }
+{ELIF} { return ELIF; }
+{ELSE} { return ELSE; }
 
-{WHILE} { printf( "Keyword: %s\n", yytext); }
-{DO} { printf( "Keyword: %s\n", yytext); }
-{DONE} { printf( "Keyword: %s\n", yytext); }
+{WHILE} { return WHILE; }
+{DO} { return DO; }
+{DONE} { return DONE; }
 
-INT { printf( "Type: %s\n", yytext); }
-FLOAT { printf( "Type: %s\n", yytext); }
-VOID { printf( "Type: %s\n", yytext); }
+INT { return INT; }
+FLOAT { return FLOAT; }
+VOID { return VOID; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
 
-{STRING_CONST} { printf( "String Constant %s\n", yytext); }
+{STRING} { printf( "String Constant %s\n", yytext); }
 
 {LETTER}({LETTER}|{DIGIT})* { printf( "Identifier %s\n", yytext ); } 
 
@@ -62,9 +62,3 @@ VOID { printf( "Type: %s\n", yytext); }
 {DIGITS}?"."{DIGITS}|{DIGITS}"."{DIGITS}? { printf( "Float %s\n", yytext); }
 
 %%
-
-main()
-{
-    yylex();
-    return 0;
-}
