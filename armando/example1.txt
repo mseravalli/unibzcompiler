@@ -1,0 +1,16 @@
+hallo
+    wenn (  --expr--  ) nor
+        wenn (  --expr--  ) nor
+            wenn (  --expr--  ) nor
+            passt
+        passt
+
+        wenn (  --expr--  ) nor
+        passt
+
+        wenn (  --expr--  ) nor
+            wenn (  --expr--  ) nor
+            passt
+        passt
+    passt
+pfiatti
