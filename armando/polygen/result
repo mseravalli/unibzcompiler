@@ -25,3 +25,152 @@ hallo
 pfiatti
 
 --> 2.
+hallo   pfiatti
+
+--> 3.
+hallo
+    wenn (  -- expr --  ) nor
+    oder wenn
+        wenn (  -- expr --  ) nor
+        passt
+    sunscht
+        solong (  -- expr --  ) tua
+            wenn (  -- expr --  ) nor
+                solong (  -- expr --  ) tua
+                    wenn (  -- expr --  ) nor
+                        solong (  -- expr --  ) tua
+                            solong (  -- expr --  ) tua
+                            passt
+                        passt
+
+                    sunscht
+                    passt
+                passt
+            passt
+        passt
+    passt
+pfiatti
+
+--> 4.
+hallo
+    solong (  -- expr --  ) tua
+        wenn (  -- expr --  ) nor
+            wenn (  -- expr --  ) nor
+                solong (  -- expr --  ) tua
+                    wenn (  -- expr --  ) nor
+                        solong (  -- expr --  ) tua
+                        passt
+                    passt
+                passt
+
+            oder wenn
+                wenn (  -- expr --  ) nor
+                sunscht
+                    solong (  -- expr --  ) tua
+                        wenn (  -- expr --  ) nor
+                        oder wenn
+                            wenn (  -- expr --  ) nor
+                                solong (  -- expr --  ) tua
+                                    solong (  -- expr --  ) tua
+                                        wenn (  -- expr --  ) nor
+                                            wenn (  -- expr --  ) nor
+                                            passt
+                                        passt
+                                    passt
+                                passt
+                            oder wenn
+                                solong (  -- expr --  ) tua
+                                    solong (  -- expr --  ) tua
+                                    passt
+                                passt
+
+                            oder wenn
+                            sunscht
+                            passt
+                        sunscht
+                            wenn (  -- expr --  ) nor
+                                solong (  -- expr --  ) tua
+                                    wenn (  -- expr --  ) nor
+                                    passt
+                                passt
+
+                            oder wenn
+                                solong (  -- expr --  ) tua
+                                    wenn (  -- expr --  ) nor
+                                    passt
+                                passt
+
+                            oder wenn
+                            sunscht
+                                solong (  -- expr --  ) tua
+                                    wenn (  -- expr --  ) nor
+                                    sunscht
+                                        solong (  -- expr --  ) tua
+                                            wenn (  -- expr --  ) nor
+                                                solong (  -- expr --  ) tua
+                                                    solong (  -- expr --  ) tua
+                                                        wenn (  -- expr --  ) nor
+                                                            solong (  -- expr --  ) tua
+                                                            passt
+                                                        passt
+                                                    passt
+                                                passt
+                                            passt
+                                        passt
+                                    passt
+                                passt
+                            passt
+                        passt
+                    passt
+                passt
+
+            oder wenn
+                wenn (  -- expr --  ) nor
+                sunscht
+                passt
+
+            oder wenn
+                wenn (  -- expr --  ) nor
+                    wenn (  -- expr --  ) nor
+                    passt
+
+                sunscht
+                    wenn (  -- expr --  ) nor
+                        wenn (  -- expr --  ) nor
+                            solong (  -- expr --  ) tua
+                                wenn (  -- expr --  ) nor
+                                passt
+                            passt
+
+                        sunscht
+                            solong (  -- expr --  ) tua
+                            passt
+                        passt
+                    oder wenn
+                    sunscht
+                        wenn (  -- expr --  ) nor
+                            solong (  -- expr --  ) tua
+                                solong (  -- expr --  ) tua
+                                    solong (  -- expr --  ) tua
+                                        solong (  -- expr --  ) tua
+                                            wenn (  -- expr --  ) nor
+                                                solong (  -- expr --  ) tua
+                                                passt
+                                            passt
+                                        passt
+                                    passt
+                                passt
+                            passt
+                        passt
+                    passt
+                passt
+            oder wenn
+                wenn (  -- expr --  ) nor
+                    solong (  -- expr --  ) tua
+                    passt
+                oder wenn
+                    sunscht
+                    passt
+                oder wenn
+                    wenn (  -- expr --  ) nor  solong (  -- expr --  ) tua   passt  sunscht  wenn (  -- expr --  ) nor  solong (  -- expr --  ) tua  solong (  -- expr --  ) tua   passt  passt  passt  passt oder wenn wenn (  -- expr --  ) nor  wenn (  -- expr --  ) nor  wenn (  -- expr --  ) nor   passt  sunscht  solong (  -- expr --  ) tua  solong (  -- expr --  ) tua   passt  passt  passt oder wenn solong (  -- expr --  ) tua   passt oder wenn wenn (  -- expr --  ) nor  wenn (  -- expr --  ) nor   passt  passt  sunscht   passt oder wenn solong (  -- expr --  ) tua  wenn (  -- expr --  ) nor  wenn (  -- expr --  ) nor   passt  sunscht  wenn (  -- expr --  ) nor  solong (  -- expr --  ) tua  solong (  -- expr --  ) tua  solong (  -- expr --  ) tua   passt  passt  passt  passt  passt  passt  sunscht   passt  passt  passt
+pfiatti
