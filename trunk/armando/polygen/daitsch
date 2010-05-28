@@ -1,26 +1,22 @@
-S ::=           Main
-                ;
-
-Main ::=        "hallo " Statement " pfiatti"
-                ;
+S ::=           Main;
+Main ::=        "hallo " Statement " pfiatti";
 
 Condition ::=   "wenn (" Expression ") nor " Ending
                 | "wenn (" Expression ") nor " Statement Else " sunscht " Ending
                 ;
 
-Whileloop ::=   "solong (" Expression ") tua " Ending;
+Whileloop ::=   "solong (" Expression ") tua " Ending
+                ;
 
 Ending ::=      Statement " passt";
-
 Else ::=        "oder wenn" Statement Else
                 | _ 
                 ;   
-
 
 Expression ::=  " -- expr -- ";
 
 Statement ::=   Statement Statement
                 | Condition
                 | Whileloop
-                |_
+                | _
                 ;
