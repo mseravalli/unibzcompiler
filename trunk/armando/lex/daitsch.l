@@ -26,7 +26,7 @@ DONE passt
 
 /****************************** Types *****************************************/
 INT ganz
-FLOAT float
+FLOAT genau
 VOID nichts
 
 /* C-others */
