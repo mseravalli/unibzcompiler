@@ -16,7 +16,7 @@ MULTIC "/*"([^/]|"/"[^*])*"*/"
 /* Contitional statement */
 IF wenn
 THEN nor
-ELIF oder wenn
+ELIF "oder wenn"
 ELSE sunscht
 
 /* Loop statement */
