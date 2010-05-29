@@ -44,3 +44,7 @@ Expressions         : '--expr--'
 
 #include "../lex/lex.daitsch.c"
 
+void yyerror (char *s)
+{
+fprintf (stderr, "%s\n", s);
+}
