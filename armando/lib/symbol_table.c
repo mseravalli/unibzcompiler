@@ -22,6 +22,7 @@ char_node *names = NULL;    // this will contain all the names that are also
                             // called lexemes (values of the identifiers)
 
 void add_string(char *new);
+void print_lexeme(char_node *start);
 
 /*
  * This function is intended for a local use. Giving it a string,
