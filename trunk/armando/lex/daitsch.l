@@ -13,6 +13,10 @@ ONEC \/\/.*
 MULTIC "/*"([^/]|"/"[^*])*"*/"
 
 /******************************** Statements **********************************/
+/* Main Program*/
+BEGIN hallo
+END pfiati
+
 /* Contitional statement */
 IF wenn
 THEN nor
