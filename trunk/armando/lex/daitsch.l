@@ -14,7 +14,7 @@ MULTIC "/*"([^/]|"/"[^*])*"*/"
 
 /******************************** Statements **********************************/
 /* Main Program*/
-BEGIN hallo
+START hallo
 END pfiati
 
 /* Contitional statement */
@@ -41,8 +41,8 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
 
 [ \t\n] { /* discarded characters */ }
 
-{BEGIN} { return IF; }
-{END} { return IF; }
+{START} { return START; }
+{END} { return END; }
 
 {IF} { return IF; }
 {THEN} { return THEN; }

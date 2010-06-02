@@ -5,7 +5,7 @@
 #include <stdio.h>
 %}
 
-%token BEGIN END
+%token START END
 %token ID INT FLOAT VOID NUM
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE
@@ -15,7 +15,7 @@
 Program             : Main
                     ;
 
-Main                : BEGIN /* Statements */ END
+Main                : START /* Statements */ END
                     ;
 
 Statements          : /* nothing */
