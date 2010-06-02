@@ -5,7 +5,7 @@
 #include <stdio.h>
 %}
 
-%token HALLO PFIATI
+%token BEGIN END
 %token ID INT FLOAT VOID NUM
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE

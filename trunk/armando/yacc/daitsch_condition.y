@@ -1,23 +1,45 @@
-%token HALLO PFIATI ID GENAU GANZ ISCH NUM
-%token IF THEN ELSE_IF ELSE DONE
-%start conditional
+%{
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+%}
+
+%token BEGIN END
+%token ID INT FLOAT VOID NUM
+%token IF THEN ELIF ELSE
+%token WHILE DO DONE
+%start Program 
+%%
+
+Program             : Main
+                    ;
+
+Main                : BEGIN /* Statements */ END
+                    ;
+
+Statements          : /* nothing */
+	                | Conditions
+	                ;
+
+Conditions          : IF '(' Expressions ')' THEN Ending
+                    | IF '(' Expressions ')' THEN Statements Else ELSE Ending
+                    ;
+
+Ending              : Statements DONE;
+
+Else                : /* nothing */
+                    | ELIF Statements Else
+                    ;
+
+Expressions         : '--expr--'
+                    ;
 
 %%
 
-conditional             : IF '(' expression ')' THEN ending
-                        | IF '(' expression ')' THEN statement else ELSE ending
-                        ;
+#include "../lex/lex.daitsch.c"
 
-ending                  : statement DONE
-                        ;
-
-else                    : ELSE_IF statement
-                        | ELSE_IF statement else
-                        |
-                        ;
-
-expression              :
-                        ;
-
-statement               : conditional
-                        ;
+void yyerror (char *s)
+{
+fprintf (stderr, "%s\n", s);
+}
