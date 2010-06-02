@@ -41,6 +41,9 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
 
 [ \t\n] { /* discarded characters */ }
 
+{BEGIN} { return IF; }
+{END} { return IF; }
+
 {IF} { return IF; }
 {THEN} { return THEN; }
 {ELIF} { return ELIF; }
