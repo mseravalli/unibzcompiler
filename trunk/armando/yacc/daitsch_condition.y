@@ -15,7 +15,7 @@
 Program             : Main
                     ;
 
-Main                : START /* Statements */ END
+Main                : START  Statements END
                     ;
 
 Statements          : /* nothing */
