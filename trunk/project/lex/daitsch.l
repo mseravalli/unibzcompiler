@@ -28,7 +28,7 @@ ELIF "oder wenn"
 ELSE sunscht
 
 /* Loop statement */
-WHILE solang
+WHILE solong
 DO tua
 DONE passt
 
@@ -55,12 +55,12 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 
 [ \t\n] { /* discarded characters */ }
 
-{START} { printf(" -- hallo\n"); return START; }
-{END} { printf(" -- pfiati\n"); return END; }
+{START} { return START; }
+{END} { return END; }
 
-{ASSIGN} { printf(" -- isch\n"); return ASSIGN; }
+{ASSIGN} { return ASSIGN; }
 
-{IF} { printf(" -- wenn\n"); return IF; }
+{IF} { return IF; }
 {THEN} { return THEN; }
 {ELIF} { return ELIF; }
 {ELSE} { return ELSE; }
@@ -69,7 +69,7 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {DO} { return DO; }
 {DONE} { return DONE; }
 
-{INT} { printf(" -- int \n"); return INT; }
+{INT} { return INT; }
 {FLOAT} { return FLOAT; }
 {VOID} { return VOID; }
 
@@ -87,5 +87,5 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {SEMICOL} { return SEMICOL; }
 {INT_NUM} { return INT_NUM; }
 
-{IDENTIFIER} {printf(" -- id \n"); return IDENTIFIER; }
+{IDENTIFIER} { return IDENTIFIER; }
 %%

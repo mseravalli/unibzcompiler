@@ -17,68 +17,72 @@
 %start Scope
 %%
 
-Scope           : Main
-                ;
-
-Main            : START Body END;
-
-Body            : Statements
-	            ;
-
-Statements      : /* empty */
-                | Statements Declaration SEMICOL
-	            | Statements Assignment SEMICOL
-                | Statements Conditional
-                ;
-
-Declaration     : Type_specifier IDENTIFIER Id_sequence
-	            ;
-
-Id_sequence     : Id_sequence IDENTIFIER
-				| 
-                ;
-
-Type_specifier  : FLOAT
-                | INT
-                ;
-
-Assignment      : IDENTIFIER ASSIGN Expression
-                | Declaration ASSIGN Expression
-                ;
-
-Conditional         : IF OPBR Condition CLBR THEN Ending
-                    | IF OPBR Condition CLBR THEN Statements Else ELSE Ending
+Scope               : Main
                     ;
 
-Ending              : Statements DONE;
-Else                : /* empty */
-                    | ELIF OPBR Condition CLBR THEN Statements Else
+Main                : START Body END;
+
+Body                : Statements
+                    ;
+
+Statements          : /* empty */
+                    | Statements Declaration SEMICOL
+                    | Statements Assignment SEMICOL
+                    | Statements Conditional
+                    | Statements Whileloop
+                    ;
+
+Declaration         : Type_specifier IDENTIFIER Id_sequence
+                    ;
+
+Id_sequence         : Id_sequence IDENTIFIER
+                    | 
+                    ;
+
+Type_specifier      : FLOAT
+                    | INT
+                    ;
+
+Assignment          : IDENTIFIER ASSIGN Expression
+                    | Declaration ASSIGN Expression
                     ;
 
 Condition           :
                     ;
 
-Expression	: Expression Addop T
-			| T
-			;
+Ending              : Statements DONE;
 
-T		: T Multop F 
-		| F
-		;
+Conditional         : IF OPBR Condition CLBR THEN Ending
+                    | IF OPBR Condition CLBR THEN Statements Else ELSE Ending
+                    ;
 
-F		: OPBR Expression CLBR
-		| IDENTIFIER
-        | INT_NUM
-		;
+Else                : /* empty */
+                    | ELIF OPBR Condition CLBR THEN Statements Else
+                    ;
 
+Whileloop           : WHILE OPBR Condition CLBR DO Ending
+                    ;
 
-Addop		: ADDOP
-			| SUBOP
-			;
+Expression          : Expression Addop T
+                    | T
+                    ;
 
-Multop		: MULTOP
-			| DIVOP
-			;
+T                   : T Multop F 
+                    | F
+                    ;
+
+F                   : OPBR Expression CLBR
+                    | IDENTIFIER
+                    | INT_NUM
+                    ;
+
+Addop               : ADDOP
+                    | SUBOP
+                    ;
+
+Multop              : MULTOP
+                    | DIVOP
+                    ;
 %%
 
 #include "../lex/lex.daitsch.c"
