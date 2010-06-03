@@ -15,6 +15,7 @@ MULTIC "/*"([^/]|"/"[^*])*"*/"
 /******************************** Statements **********************************/
 /*  */
 ASSIGN isch
+SEMICOL ;
 
 /* Main Program*/
 START hallo
@@ -36,21 +37,21 @@ INT ganz
 FLOAT genau
 VOID nichts
 
+INT_NUM {DIGIT}*
+
 /* C-others */
 STRING \".*\"
-IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
-SEMICOL ;
-
+IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 %%
 
 [ \t\n] { /* discarded characters */ }
 
-{START} { return START; }
-{END} { return END; }
+{START} { printf(" -- hallo\n"); return START; }
+{END} { printf(" -- pfiati\n"); return END; }
 
-{ASSIGN} { return ASSIGN; }
+{ASSIGN} { printf(" -- isch\n"); return ASSIGN; }
 
-{IF} { return IF; }
+{IF} { printf(" -- wenn\n"); return IF; }
 {THEN} { return THEN; }
 {ELIF} { return ELIF; }
 {ELSE} { return ELSE; }
@@ -59,20 +60,15 @@ SEMICOL ;
 {DO} { return DO; }
 {DONE} { return DONE; }
 
-INT { return INT; }
-FLOAT { return FLOAT; }
-VOID { return VOID; }
+{INT} { printf(" -- int \n"); return INT; }
+{FLOAT} { return FLOAT; }
+{VOID} { return VOID; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
+
 {SEMICOL} { return SEMICOL; }
+{INT_NUM} { return INT_NUM; }
 
-{STRING} { printf( "String Constant %s\n", yytext); }
-
-{LETTER}({LETTER}|{DIGIT})* { printf( "Identifier %s\n", yytext ); } 
-
-{DIGIT}* { printf( "Integer %s\n", yytext); }
-
-{DIGITS}?"."{DIGITS}|{DIGITS}"."{DIGITS}? { printf( "Float %s\n", yytext); }
-
+{IDENTIFIER} {printf(" -- id \n"); return IDENTIFIER; }
 %%

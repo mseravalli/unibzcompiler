@@ -6,7 +6,8 @@
 %}
 
 %token START END
-%token ID INT FLOAT VOID NUM
+%token IDENTIFIER INT FLOAT VOID
+%token INT_NUM
 %token ASSIGN
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
@@ -17,29 +18,29 @@ scope           : main
                 ;
 
 main            : START body END
+
                 ;
 
-body            : statements SEMICOL
+body            : statements
 	            ;
 
-statements      : declaration
-	            | assignment
+statements      : /* epsylon */
+                | declaration SEMICOL
+	            | assignment SEMICOL
+                ;
+
+declaration     : type_specifier IDENTIFIER id_sequence
 	            ;
 
-declaration
-	            : type_specifier ID id_sequence
-	            ;
-
-id_sequence     : id_sequence ID
+id_sequence     : id_sequence IDENTIFIER
 				| 
                 ;
-
 
 type_specifier  : FLOAT
                 | INT
                 ;
 
-assignment      : ID ASSIGN expression
+assignment      : IDENTIFIER ASSIGN expression
                 | declaration ASSIGN expression
                 ;
 
@@ -52,7 +53,8 @@ T		: T multop F
 		;
 
 F		: '('expression')'
-		| ID
+		| IDENTIFIER
+        | INT_NUM
 		;
 
 addop		: '+'
@@ -63,6 +65,7 @@ multop		: '*'
 			| '/'
 			;
 %%
+
 #include "../lex/lex.daitsch.c"
 
 void yyerror (char *s)
