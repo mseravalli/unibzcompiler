@@ -6,7 +6,15 @@ a isch 1+2;
 b isch 2;
 b isch a+(b-c)*a;
 
+solong () tua
+passt
+
 wenn () nor
+    wenn () nor
+    passt
+
+    wenn () nor
+    passt
 passt
 
 wenn () nor
