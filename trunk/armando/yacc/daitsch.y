@@ -12,10 +12,10 @@
 %start Program 
 %%
 
-Program             : Main     {printf("OK..\n"); exit(0);}
+Program             : Main
                     ;
 
-Main                : START Statements END
+Main                : START /* Statements*/ END
                     ;
 
 Statements          : /* nothing */
