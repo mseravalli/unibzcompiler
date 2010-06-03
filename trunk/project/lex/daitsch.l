@@ -39,6 +39,7 @@ VOID nichts
 /* C-others */
 STRING \".*\"
 IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
+SEMICOL ;
 
 %%
 
@@ -64,6 +65,7 @@ VOID { return VOID; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
+{SEMICOL} { return SEMICOL; }
 
 {STRING} { printf( "String Constant %s\n", yytext); }
 
