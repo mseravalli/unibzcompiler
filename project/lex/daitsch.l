@@ -32,6 +32,15 @@ WHILE solang
 DO tua
 DONE passt
 
+/* Operations */
+ADDOP "+"
+SUBOP "-"
+MULTOP "*"
+DIVOP "/"
+
+OPBR "("
+CLBR ")"
+
 /****************************** Types *****************************************/
 INT ganz
 FLOAT genau
@@ -63,6 +72,14 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {INT} { printf(" -- int \n"); return INT; }
 {FLOAT} { return FLOAT; }
 {VOID} { return VOID; }
+
+{ADDOP} { return ADDOP; }
+{SUBOP} { return SUBOP; }
+{MULTOP} { return MULTOP; }
+{DIVOP} { return DIVOP; }
+
+{OPBR} { return OPBR; }
+{CLBR} { return CLBR; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
