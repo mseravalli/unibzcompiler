@@ -16,21 +16,11 @@ statements      : declaration
 	            ;
 
 declaration
-	            : multiple_declaration
+	            : type_specifier ID id_sequence
 	            ;
 
-unary_declaration
-                : type_specifier ID
-                ;
-
-//  MULTIPLE DECLARATIONS THROWS 2 REDUCE/REDUCE CONFLICTS
-multiple_declaration
-                : type_specifier ID id_sequence
-                ;
-
-
-id_sequence     : id_sequence, ID
-		| 
+id_sequence     : id_sequence ID
+				| 
                 ;
 
 
@@ -39,12 +29,13 @@ type_specifier  : GENAU
                 ;
 
 assignment      : ID ISCH expression
-                | unary_declaration ISCH expression
+                | declaration ISCH expression
                 ;
 
 expression	: expression addop T
-		|T
-		;
+			| T
+			;
+
 T		: T multop F 
 		| F
 		;
@@ -54,9 +45,18 @@ F		: '('expression')'
 		;
 
 addop		: '+'
-		| '-'
-		;
+			| '-'
+			;
 
 multop		: '*'
-		| '/'
-		;
+			| '/'
+			;
+
+%%
+
+#include "../lex/lex.yy.c"
+
+void yyerror (char *s)
+{
+fprintf (stderr, "%s\n", s);
+}
