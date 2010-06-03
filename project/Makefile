@@ -3,7 +3,7 @@ LFLAGS=-l
 YACC=yacc
 YFLEGS=-vd
 CC=gcc
-CCFLAGS=-DYYDEBUG -lfl
+CCFLAGS=-DYYDEBUG -ly -lfl
 
 parser: 
 	$(LEX) $(LFLAGS) -o lex/lex.daitsch.c lex/daitsch.l
