@@ -11,58 +11,73 @@
 %token ASSIGN
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
-%start scope
+%token ADDOP SUBOP MULTOP DIVOP
+%token OPBR CLBR
+
+%start Scope
 %%
 
-scope           : main
+Scope           : Main
                 ;
 
-main            : START body END
+Main            : START Body END;
 
-                ;
-
-body            : statements
+Body            : Statements
 	            ;
 
-statements      : /* epsylon */
-                | declaration SEMICOL
-	            | assignment SEMICOL
+Statements      : /* empty */
+                | Statements Declaration SEMICOL
+	            | Statements Assignment SEMICOL
+                | Statements Conditional
                 ;
 
-declaration     : type_specifier IDENTIFIER id_sequence
+Declaration     : Type_specifier IDENTIFIER Id_sequence
 	            ;
 
-id_sequence     : id_sequence IDENTIFIER
+Id_sequence     : Id_sequence IDENTIFIER
 				| 
                 ;
 
-type_specifier  : FLOAT
+Type_specifier  : FLOAT
                 | INT
                 ;
 
-assignment      : IDENTIFIER ASSIGN expression
-                | declaration ASSIGN expression
+Assignment      : IDENTIFIER ASSIGN Expression
+                | Declaration ASSIGN Expression
                 ;
 
-expression	: expression addop T
+Conditional         : IF OPBR Condition CLBR THEN Ending
+                    | IF OPBR Condition CLBR THEN Statements Else ELSE Ending
+                    ;
+
+Ending              : Statements DONE;
+Else                : /* empty */
+                    | ELIF OPBR Condition CLBR THEN Statements Else
+                    ;
+
+Condition           :
+                    ;
+
+Expression	: Expression Addop T
 			| T
 			;
 
-T		: T multop F 
+T		: T Multop F 
 		| F
 		;
 
-F		: '('expression')'
+F		: OPBR Expression CLBR
 		| IDENTIFIER
         | INT_NUM
 		;
 
-addop		: '+'
-			| '-'
+
+Addop		: ADDOP
+			| SUBOP
 			;
 
-multop		: '*'
-			| '/'
+Multop		: MULTOP
+			| DIVOP
 			;
 %%
 
