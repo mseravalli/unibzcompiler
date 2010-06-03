@@ -9,7 +9,7 @@
 %token ID INT FLOAT VOID NUM
 %token ASSIGN
 %token IF THEN ELIF ELSE
-%token WHILE DO DONE
+%token WHILE DO DONE SEMICOL
 %start scope
 %%
 
@@ -19,7 +19,7 @@ scope           : main
 main            : START body END
                 ;
 
-body            : statements ';'
+body            : statements SEMICOL
 	            ;
 
 statements      : declaration
