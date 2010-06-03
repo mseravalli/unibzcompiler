@@ -13,6 +13,9 @@ ONEC \/\/.*
 MULTIC "/*"([^/]|"/"[^*])*"*/"
 
 /******************************** Statements **********************************/
+/*  */
+ASSIGN isch
+
 /* Main Program*/
 START hallo
 END pfiati
@@ -43,6 +46,8 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
 
 {START} { return START; }
 {END} { return END; }
+
+{ASSIGN} { return ASSIGN; }
 
 {IF} { return IF; }
 {THEN} { return THEN; }

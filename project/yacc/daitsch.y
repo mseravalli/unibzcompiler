@@ -1,11 +1,22 @@
-%token HALLO PFIATI ID GENAU GANZ ISCH NUM
+%{
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+%}
+
+%token START END
+%token ID INT FLOAT VOID NUM
+%token ASSIGN
+%token IF THEN ELIF ELSE
+%token WHILE DO DONE
 %start scope
 %%
 
 scope           : main
                 ;
 
-main            : HALLO body PFIATI
+main            : START body END
                 ;
 
 body            : statements ';'
@@ -24,12 +35,12 @@ id_sequence     : id_sequence ID
                 ;
 
 
-type_specifier  : GENAU
-                | GANZ
+type_specifier  : FLOAT
+                | INT
                 ;
 
-assignment      : ID ISCH expression
-                | declaration ISCH expression
+assignment      : ID ASSIGN expression
+                | declaration ASSIGN expression
                 ;
 
 expression	: expression addop T
@@ -51,9 +62,7 @@ addop		: '+'
 multop		: '*'
 			| '/'
 			;
-
 %%
-
 #include "../lex/lex.daitsch.c"
 
 void yyerror (char *s)
