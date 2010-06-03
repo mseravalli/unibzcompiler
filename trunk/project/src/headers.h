@@ -16,4 +16,5 @@ typedef struct sym_node {
     char *lexeme;
     int type;           // 0 == ganz
                         // 1 == genau
+                        // 2 == boolean
 } sym_node;
