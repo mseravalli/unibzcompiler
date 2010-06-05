@@ -11,8 +11,6 @@
 %token ASSIGN
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
-%token ADDOP SUBOP MULTOP DIVOP
-%token OPBR CLBR OPSBR CLSBR
 
 %start Scope
 %%
@@ -33,11 +31,11 @@ Statements          : /* empty */
                     ;
 
 Declaration         : Type_specifier IDENTIFIER Id_sequence
-                    | Type_specifier IDENTIFIER OPSBR INT_NUM CLSBR Id_sequence
+                    | Type_specifier IDENTIFIER '[' INT_NUM ']' Id_sequence
                     ;
 
 Id_sequence         : Id_sequence IDENTIFIER
-                    | Id_sequence IDENTIFIER OPSBR INT_NUM CLSBR
+                    | Id_sequence IDENTIFIER '[' INT_NUM ']'
                     |
                     ;
 
@@ -46,7 +44,7 @@ Type_specifier      : FLOAT
                     ;
 
 Assignment          : IDENTIFIER ASSIGN Expression
-                    | IDENTIFIER OPSBR INT_NUM CLSBR ASSIGN Expression
+                    | IDENTIFIER '[' INT_NUM ']' ASSIGN Expression
                     | Declaration ASSIGN Expression
                     ;
 
@@ -55,15 +53,15 @@ Condition           :
 
 Ending              : Statements DONE;
 
-Conditional         : IF OPBR Condition CLBR THEN Ending
-                    | IF OPBR Condition CLBR THEN Statements Else ELSE Ending
+Conditional         : IF '(' Condition ')' THEN Ending
+                    | IF '(' Condition ')' THEN Statements Else ELSE Ending
                     ;
 
 Else                : /* empty */
-                    | ELIF OPBR Condition CLBR THEN Statements Else
+                    | ELIF '(' Condition ')' THEN Statements Else
                     ;
 
-Whileloop           : WHILE OPBR Condition CLBR DO Ending
+Whileloop           : WHILE '(' Condition ')' DO Ending
                     ;
 
 Expression          : Expression Addop T
@@ -74,18 +72,18 @@ T                   : T Multop F
                     | F
                     ;
 
-F                   : OPBR Expression CLBR
+F                   : '(' Expression ')'
                     | IDENTIFIER
-                    | IDENTIFIER OPSBR INT_NUM CLSBR
+                    | IDENTIFIER '[' INT_NUM ']'
                     | INT_NUM
                     ;
 
-Addop               : ADDOP
-                    | SUBOP
+Addop               : '+'
+                    | '-'
                     ;
 
-Multop              : MULTOP
-                    | DIVOP
+Multop              : '*'
+                    | '/'
                     ;
 %%
 
