@@ -32,17 +32,6 @@ WHILE solong
 DO tua
 DONE passt
 
-/* Operations */
-ADDOP "+"
-SUBOP "-"
-MULTOP "*"
-DIVOP "/"
-
-OPBR "("
-CLBR ")"
-OPSBR "["
-CLSBR "]"
-
 /****************************** Types *****************************************/
 INT ganz
 FLOAT genau
@@ -75,15 +64,15 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {FLOAT} { return FLOAT; }
 {VOID} { return VOID; }
 
-{ADDOP} { return ADDOP; }
-{SUBOP} { return SUBOP; }
-{MULTOP} { return MULTOP; }
-{DIVOP} { return DIVOP; }
+"+" { return '+'; }
+"-" { return '-'; }
+"*" { return '*'; }
+"/" { return '/'; }
 
-{OPBR} { return OPBR; }
-{CLBR} { return CLBR; }
-{OPSBR} { return OPSBR;}
-{CLSBR} { return CLSBR; }
+"(" { return '('; }
+")" { return ')'; }
+"[" { return '['; }
+"]" { return ']'; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
