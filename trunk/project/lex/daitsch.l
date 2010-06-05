@@ -40,6 +40,8 @@ DIVOP "/"
 
 OPBR "("
 CLBR ")"
+OPSBR "["
+CLSBR "]"
 
 /****************************** Types *****************************************/
 INT ganz
@@ -80,6 +82,8 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 
 {OPBR} { return OPBR; }
 {CLBR} { return CLBR; }
+{OPSBR} { return OPSBR;}
+{CLSBR} { return CLSBR; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
