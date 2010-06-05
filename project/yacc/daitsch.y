@@ -12,7 +12,7 @@
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
 %token ADDOP SUBOP MULTOP DIVOP
-%token OPBR CLBR
+%token OPBR CLBR OPSBR CLSBR
 
 %start Scope
 %%
@@ -33,10 +33,12 @@ Statements          : /* empty */
                     ;
 
 Declaration         : Type_specifier IDENTIFIER Id_sequence
+                    | Type_specifier IDENTIFIER OPSBR INT_NUM CLSBR Id_sequence
                     ;
 
 Id_sequence         : Id_sequence IDENTIFIER
-                    | 
+                    | Id_sequence IDENTIFIER OPSBR INT_NUM CLSBR
+                    |
                     ;
 
 Type_specifier      : FLOAT
@@ -44,6 +46,7 @@ Type_specifier      : FLOAT
                     ;
 
 Assignment          : IDENTIFIER ASSIGN Expression
+                    | IDENTIFIER OPSBR INT_NUM CLSBR ASSIGN Expression
                     | Declaration ASSIGN Expression
                     ;
 
@@ -73,6 +76,7 @@ T                   : T Multop F
 
 F                   : OPBR Expression CLBR
                     | IDENTIFIER
+                    | IDENTIFIER OPSBR INT_NUM CLSBR
                     | INT_NUM
                     ;
 
