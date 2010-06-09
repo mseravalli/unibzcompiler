@@ -1,16 +1,18 @@
-/******************************************************************************
+/****************************************************************************** 
  *                                                                            *
- * filename: symbol_table.c                                                   *
+ * file name: symbol_table.c                                                  *
  * author: Armando Miraglia                                                   *
  * email: armando.miraglia@stud-inf.unibz.it                                  *
+ * version: 0.1                                                               *
  *                                                                            *
- * last modify: 30/05/10 00:22                                                *
- * author: Armando Miraglia                                                   *
+ * last modification: 10/06/10 00:42                                          *
+ * last mod. author: Armando                                                  *
  *                                                                            *
  ******************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "headers.h"
 
 /******************** String Names Handeling (lexemes) ************************/
 typedef struct char_node {
@@ -21,8 +23,79 @@ typedef struct char_node {
 char_node *names = NULL;    // this will contain all the names that are also
                             // called lexemes (values of the identifiers)
 
-void add_string(char *new);
+/******************** Actual Symbol Table *************************************/
+typedef struct sym_node {
+    struct sym_node*    next;
+    int                 token;
+    char_node           *lexeme;
+    int                 type;       // 0 == ganz
+                                    // 1 == genau
+} sym_node;
+
+sym_node *tbl_head = NULL;          // haad of the symbol table (list imp.)
+
+
+/******************************************************************************/
+sym_node *add_symbol(int token, char *lexeme, int type);
+void print_symbols();
+
+/******************************************************************************/
+char_node *add_lexeme(char *new);
 void print_lexeme(char_node *start);
+
+
+/******************************************************************************/
+
+/* */
+sym_node *add_symbol(int token, char *lexeme, int type) {
+    sym_node *p = tbl_head;
+    sym_node *t;
+
+    // firstly advance the pointer through the list
+    // if necessary
+    while(p != NULL && p->next != NULL) {
+        p = p->next;
+    }
+
+    // creation of the node to be added
+    t = (sym_node *)malloc(sizeof(sym_node));
+    t->token = token;
+    t->lexeme = add_lexeme(lexeme);
+    t->type = type;
+    t->next = NULL;
+
+    // p could be NULL if the symbol table is empty (so is treated
+    // as a special caae
+    if(p == NULL) {
+        tbl_head = t;
+    } else {
+        p->next = t;
+    }
+
+    return t;
+}
+
+/* */
+void print_symbols() {
+    sym_node *p = tbl_head;
+
+    if(p == NULL) {
+        printf("-- symbol tabel empty --\n");
+    } else {
+        while(p != NULL) {
+            printf("-- token: %d", p->token);
+            printf(" lexeme ");
+            print_lexeme(p->lexeme);
+            printf(" type %d", p->type);
+            printf("\n");
+            p = p->next;
+        }
+    }
+    printf("\n");
+}
+
+
+/******************************************************************************/
 
 /*
  * This function is intended for a local use. Giving it a string,
@@ -104,18 +177,30 @@ void print_lexeme(char_node *start) {
     char_node *p = start;
 
     while(p != NULL && p->a != '\0') {
-        printf("%c", *p);
+        printf("%c", p->a);
         p = p->next;
     }
-    printf("\n");
 }
 
-//int main() {
+int main() {
 //    char_node *first, *second;
-//
+
 //    first = add_lexeme("qualche dubbio");
 //    second = add_lexeme("uff");
-//
+
+//    printf("@address: %p\n", first);
+//    printf("@address: %p\n", second);
 //    print_lexeme(first);
+//    printf("\n");
 //    print_lexeme(second);
-//}
+//    printf("\n");
+
+    printf("------- Sym Tabel -------\n");
+    print_symbols();
+    add_symbol(10, "qualche dubbio", 1);
+    print_symbols();
+    add_symbol(10, "uff", 2);
+    print_symbols();
+
+    return 0;
+}
