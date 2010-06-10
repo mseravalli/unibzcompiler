@@ -10,7 +10,7 @@ parser:
 	$(LEX) $(LFLAGS) -o lex/lex.example.c lex/example.l
 	$(YACC) ${YFLEGS} -o yacc/yacc.example.c yacc/example.y
 	$(CC) $(CCFLAGS) -c -o lib/symbol_table.o lib/symbol_table.c
-	$(CC) $(CCFLAGS) $(CCYFLAGS) -o bin/parser yacc/yacc.example.c lib/symbol_table.o
+	$(CC) $(CCYFLAGS) -o bin/parser yacc/yacc.example.c lib/symbol_table.o
 
 clean:
 	rm bin/parser lex/lex.example.c yacc/yacc.example.* lib/*.o

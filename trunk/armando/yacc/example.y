@@ -10,14 +10,14 @@
 %union
 {
     char* lexeme;
-    int   <token>
+    int   token;
 }
 
 %token <token> ID
 %start Scope
 %%
 
-Scope               : Program               {print_table();}
+Scope               : Program               {print_symbols();}
                     ;
 
 Program             : Program ID            {add_symbol($2, yylval.lexeme, 0);}
@@ -26,7 +26,9 @@ Program             : Program ID            {add_symbol($2, yylval.lexeme, 0);}
 
 %%
 
+/*
 void yyerror (char *s)
 {
     fprintf (stderr, "%s\n", s);
 }
+*/
