@@ -15,37 +15,17 @@
 #include "headers.h"
 
 /******************** String Names Handeling (lexemes) ************************/
-typedef struct char_node {
-    char a;                 // character of the string (EOS == '\0'
-    struct char_node *next; // pointer to the next character
-} char_node;
-
 char_node *names = NULL;    // this will contain all the names that are also
                             // called lexemes (values of the identifiers)
 
 /******************** Actual Symbol Table *************************************/
-typedef struct sym_node {
-    struct sym_node*    next;
-    int                 token;
-    char_node           *lexeme;
-    int                 type;       // 0 == ganz
-                                    // 1 == genau
-} sym_node;
-
 sym_node *tbl_head = NULL;          // haad of the symbol table (list imp.)
-
-
-/******************************************************************************/
-sym_node *add_symbol(int token, char *lexeme, int type);
-void print_symbols();
 
 /******************************************************************************/
 char_node *add_lexeme(char *new);
 void print_lexeme(char_node *start);
 
-
 /******************************************************************************/
-
 /* */
 sym_node *add_symbol(int token, char *lexeme, int type) {
     sym_node *p = tbl_head;
@@ -182,7 +162,8 @@ void print_lexeme(char_node *start) {
     }
 }
 
-int main() {
+//int main() {
+// --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
 
 //    first = add_lexeme("qualche dubbio");
@@ -194,13 +175,16 @@ int main() {
 //    printf("\n");
 //    print_lexeme(second);
 //    printf("\n");
+// --- END ---
 
-    printf("------- Sym Tabel -------\n");
-    print_symbols();
-    add_symbol(10, "qualche dubbio", 1);
-    print_symbols();
-    add_symbol(10, "uff", 2);
-    print_symbols();
+// --- PER TESTARE LA SYMBOL TABLE ---
+//    printf("------- Sym Tabel -------\n");
+//    print_symbols();
+//    add_symbol(10, "qualche dubbio", 1);
+//    print_symbols();
+//    add_symbol(10, "uff", 2);
+//    print_symbols();
+// --- END ---
 
-    return 0;
-}
+//    return 0;
+//}
