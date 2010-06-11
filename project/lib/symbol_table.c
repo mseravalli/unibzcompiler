@@ -1,11 +1,11 @@
 /****************************************************************************** 
  *                                                                            *
- * file name: utilities.c                                                     *
+ * file name: symbol_table.c                                                  *
  * author: Armando Miraglia                                                   *
  * email: armando.miraglia@stud-inf.unibz.it                                  *
  * version: 0.1                                                               *
  *                                                                            *
- * last modification: 28/05/10 10:36                                          *
+ * last modification: 10/06/10 00:42                                          *
  * last mod. author: Armando                                                  *
  *                                                                            *
  ******************************************************************************/
@@ -14,20 +14,72 @@
 #include <stdio.h>
 #include "headers.h"
 
-/******************** Actual Symbol Table *************************************/
-sym_node *table_head = NULL;        // haad of the symbol table (list imp.)
-
 /******************** String Names Handeling (lexemes) ************************/
-typedef struct char_node {
-    char a;                 // character of the string (EOS == '\0'
-    struct char_node *next; // pointer to the next character
-} char_node;
-
 char_node *names = NULL;    // this will contain all the names that are also
                             // called lexemes (values of the identifiers)
 
-void add_string(char *new);
+/******************** Actual Symbol Table *************************************/
+sym_node *tbl_head = NULL;          // haad of the symbol table (list imp.)
+
+/******************************************************************************/
+char_node *add_lexeme(char *new);
 void print_lexeme(char_node *start);
+
+/******************************************************************************/
+/* */
+sym_node *add_symbol(int token, char *lexeme, int type) {
+    sym_node *p = tbl_head;
+    sym_node *t;
+
+    // firstly advance the pointer through the list
+    // if necessary
+    while(p != NULL && p->next != NULL) {
+        p = p->next;
+    }
+
+    // creation of the node to be added
+    t = (sym_node *)malloc(sizeof(sym_node));
+    t->token = token;
+    t->lexeme = add_lexeme(lexeme);
+    t->fval = DEFAULT_FVAL;
+    t->ival = DEFAULT_IVAL;
+    t->type = type;
+    t->next = NULL;
+
+    // p could be NULL if the symbol table is empty (so is treated
+    // as a special caae
+    if(p == NULL) {
+        tbl_head = t;
+    } else {
+        p->next = t;
+    }
+
+    return t;
+}
+
+/* */
+void print_symbols() {
+    sym_node *p = tbl_head;
+
+    if(p == NULL) {
+        printf("-- symbol tabel empty --\n");
+    } else {
+        while(p != NULL) {
+            printf("-- token: %d", p->token);
+            printf(" lexeme ");
+            print_lexeme(p->lexeme);
+            printf(" ival %d", p->ival);
+            printf(" fval %f", p->fval);
+            printf(" type %d", p->type);
+            printf("\n");
+            p = p->next;
+        }
+    }
+    printf("\n");
+}
+
+
+/******************************************************************************/
 
 /*
  * This function is intended for a local use. Giving it a string,
@@ -40,7 +92,7 @@ void print_lexeme(char_node *start);
  *
  * example:
  *   ________________________
- *  |f|i|s|t||EOS|s|e|c|o|n|d| but implemented as a list
+ *  |f|i|s|t|EOS|s|e|c|o|n|d| but implemented as a list
  *   ------------------------
  *
  */
@@ -109,18 +161,34 @@ void print_lexeme(char_node *start) {
     char_node *p = start;
 
     while(p != NULL && p->a != '\0') {
-        printf("%c", *p);
+        printf("%c", p->a);
         p = p->next;
     }
-    printf("\n");
 }
 
 //int main() {
+// --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
-//
+
 //    first = add_lexeme("qualche dubbio");
 //    second = add_lexeme("uff");
-//
+
+//    printf("@address: %p\n", first);
+//    printf("@address: %p\n", second);
 //    print_lexeme(first);
+//    printf("\n");
 //    print_lexeme(second);
+//    printf("\n");
+// --- END ---
+
+// --- PER TESTARE LA SYMBOL TABLE ---
+//    printf("------- Sym Tabel -------\n");
+//    print_symbols();
+//    add_symbol(10, "qualche dubbio", 1);
+//    print_symbols();
+//    add_symbol(10, "uff", 2);
+//    print_symbols();
+// --- END ---
+
+//    return 0;
 //}
