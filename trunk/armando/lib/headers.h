@@ -10,6 +10,9 @@
  *                                                                            *
  ******************************************************************************/
 
+#define DEFAULT_IVAL 0
+#define DEFAULT_FVAL 0.0f
+
 typedef struct char_node {
     char a;                 // character of the string (EOS == '\0')
     struct char_node *next; // pointer to the next character
@@ -19,8 +22,9 @@ typedef struct sym_node {
     struct sym_node*    next;
     int                 token;
     char_node           *lexeme;
-    int                 type;       // 0 == ganz
-                                    // 1 == genau
+    float               fval;
+    int                 ival;
+    int                 type;
 } sym_node;
 
 /******************************************************************************/

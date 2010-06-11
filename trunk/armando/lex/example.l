@@ -6,15 +6,13 @@
 
 DIGIT [0-9]
 LETTER [a-zA-Z]
-DIGITS {DIGIT}* 
-
-ID {LETTER}({LETTER}|{DIGIT}|[_-])*
+ID {LETTER}({LETTER}|{DIGIT})*
 
 %%
 
-[ \t\n] { /* discarded characters */ }
+[ ] { /* discarded characters */ }
 
-{ID} {  yylval.lexeme = strdup(yytext);
-        return ID; } 
+{ID} {yylval.lexeme = strdup(yytext);
+      return ID;} 
 
 %%

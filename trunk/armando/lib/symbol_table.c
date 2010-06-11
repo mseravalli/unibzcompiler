@@ -41,6 +41,8 @@ sym_node *add_symbol(int token, char *lexeme, int type) {
     t = (sym_node *)malloc(sizeof(sym_node));
     t->token = token;
     t->lexeme = add_lexeme(lexeme);
+    t->fval = DEFAULT_FVAL;
+    t->ival = DEFAULT_IVAL;
     t->type = type;
     t->next = NULL;
 
@@ -66,6 +68,8 @@ void print_symbols() {
             printf("-- token: %d", p->token);
             printf(" lexeme ");
             print_lexeme(p->lexeme);
+            printf(" ival %d", p->ival);
+            printf(" fval %f", p->fval);
             printf(" type %d", p->type);
             printf("\n");
             p = p->next;
@@ -88,7 +92,7 @@ void print_symbols() {
  *
  * example:
  *   ________________________
- *  |f|i|s|t||EOS|s|e|c|o|n|d| but implemented as a list
+ *  |f|i|s|t|EOS|s|e|c|o|n|d| but implemented as a list
  *   ------------------------
  *
  */
