@@ -3,32 +3,34 @@ ganz a isch 2;
 
 a isch 1+2;
 
-a isch net (net 1);
+bool b isch a;
 
-solong () tua
+bool c isch [1 < 2];
+
+solong [folsch] tua
 passt
 
-wenn () nor
-    wenn () nor
+wenn [ 1 > (3+2)] nor
+    wenn [richtig] nor
     passt
 
-    wenn () nor
+    wenn [richtig] nor
     passt
 passt
 
-wenn () nor
+wenn [ richtig und folsch ] nor
 sunscht
 passt
 
-wenn () nor
-oder wenn () nor
+wenn [b] nor
+oder wenn [a] nor
 sunscht
 passt
 
-wenn () nor
-oder wenn () nor
-oder wenn () nor
-oder wenn () nor
+wenn [richtig] nor
+oder wenn [folsch] nor
+oder wenn [richtig] nor
+oder wenn [folsch] nor
 sunscht
 passt
 
