@@ -1,12 +1,9 @@
 hallo
 ganz a isch 2;
-ganz b[2] c d[20];
 
 a isch 1+2;
-b[1] isch 2;
-b[0] isch a[2];
 
-ganz d[1] isch 2;
+a isch net (net 1);
 
 solong () tua
 passt
