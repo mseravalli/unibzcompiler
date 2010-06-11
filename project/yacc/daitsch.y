@@ -3,20 +3,31 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+#include "../lib/headers.h"
 %}
 
+%union {
+    char* lexeme;
+    float floatnum;
+    int   intnum;
+    int   type;
+}
 %token START END
-%token IDENTIFIER INT FLOAT BOOL VOID
-%token INT_NUM TRUE FALSE
+%token INT FLOAT BOOL VOID
+%token TRUE FALSE
 %token NET UND ODER
 %token ASSIGN EQUALS
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
+%token <intnum> INT_NUM
+%token <floatnum> FLOAT_NUM
+%token <lexeme> IDENTIFIER
 
+%type <type> Type_specifier
 %start Scope
 %%
 
-Scope               : Main
+Scope               : Main              {print_symbols();}
                     ;
 
 Main                : START Body END;
@@ -31,16 +42,16 @@ Statements          : /* empty */
                     | Statements Whileloop
                     ;
 
-Declaration         : Type_specifier IDENTIFIER Id_sequence
+Declaration         : Type_specifier IDENTIFIER { add_symbol(IDENTIFIER, $2, $1); } Id_sequence
                     ;
 
 Id_sequence         : Id_sequence IDENTIFIER
                     |
                     ;
 
-Type_specifier      : FLOAT
-                    | INT
-					| BOOL
+Type_specifier      : FLOAT {$$ = FLOAT;}
+                    | INT {$$ = INT;}
+					| BOOL {$$ = BOOL;}
                     ;
 
 Assignment          : IDENTIFIER ASSIGN Expression
@@ -104,7 +115,7 @@ T                   : T Multop F
                     ;
 
 F                   : '(' Arith_expression ')'
-                    | IDENTIFIER
+                    | IDENTIFIER                
                     | INT_NUM
                     ;
 

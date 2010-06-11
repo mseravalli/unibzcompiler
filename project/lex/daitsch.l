@@ -47,6 +47,7 @@ FALSE folsch
 EQUALS gleich
 
 INT_NUM {DIGIT}*
+FLOAT_NUM {DIGIT}+"."{DIGIT}+
 
 /* C-others */
 STRING \".*\"
@@ -96,13 +97,16 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 "[" { return '['; }
 "]" { return ']'; }
 
-
-
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
 
-{SEMICOL} { return SEMICOL; }
-{INT_NUM} { return INT_NUM; }
+{SEMICOL}   { return SEMICOL; }
+{FLOAT_NUM} { yylval.floatnum = atof(yytext);
+              return FLOAT_NUM; }
 
-{IDENTIFIER} { return IDENTIFIER; }
+{INT_NUM}   { yylval.intnum = atoi(yytext);
+              return INT_NUM; }
+
+{IDENTIFIER} { yylval.lexeme = strdup(yytext);
+               return IDENTIFIER; }
 %%

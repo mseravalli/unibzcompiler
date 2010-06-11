@@ -3,12 +3,14 @@ LFLAGS=-l
 YACC=yacc
 YFLEGS=-vd
 CC=gcc
-CCFLAGS=-DYYDEBUG -ly -lfl
+CCFLAGS=-Wall -g
+CCYFLAGS=-DYYDEBUG -ly -lfl
 
 parser: 
 	$(LEX) $(LFLAGS) -o lex/lex.daitsch.c lex/daitsch.l
 	$(YACC) ${YFLEGS} -o yacc/yacc.daitsch.c yacc/daitsch.y
-	$(CC) $(CCFLAGS) -o bin/parser yacc/yacc.daitsch.c
+	$(CC) $(CCFLAGS) -c -o lib/symbol_table.o lib/symbol_table.c
+	$(CC) $(CCYFLAGS) $(CCFLAGS) -o bin/parser yacc/yacc.daitsch.c lib/symbol_table.o
 
 clean:
-	rm bin/parser lex/lex.daitsch.c yacc/yacc.daitsch.*
+	rm bin/parser lex/lex.daitsch.c yacc/yacc.daitsch.* lib/*.o
