@@ -34,13 +34,17 @@ DONE passt
 
 /****************************** Types *****************************************/
 INT ganz
-FLOAT genau
+FLOAT gena
+BOOL bool
 VOID nichts
 
 /****************************** Relational operators *****************************************/
 NET net
 UND und
 ODER oder
+TRUE richtig
+FALSE folsch
+EQUALS gleich
 
 INT_NUM {DIGIT}*
 
@@ -67,16 +71,25 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 
 {INT} { return INT; }
 {FLOAT} { return FLOAT; }
+{BOOL} { return BOOL; }
 {VOID} { return VOID; }
 
 {NET} { return NET; }
 {UND} { return UND; }
 {ODER} { return ODER; } 
 
+{EQUALS} { return EQUALS; }
+
+{TRUE} { return TRUE; } 
+{FALSE} { return FALSE; } 
+
 "+" { return '+'; }
 "-" { return '-'; }
 "*" { return '*'; }
 "/" { return '/'; }
+
+"<" { return '<'; }
+">" { return '>'; }
 
 "(" { return '('; }
 ")" { return ')'; }
