@@ -8,6 +8,7 @@
 %token START END
 %token IDENTIFIER INT FLOAT VOID
 %token INT_NUM
+%token NET UND ODER
 %token ASSIGN
 %token IF THEN ELIF ELSE
 %token WHILE DO DONE SEMICOL
@@ -31,11 +32,9 @@ Statements          : /* empty */
                     ;
 
 Declaration         : Type_specifier IDENTIFIER Id_sequence
-                    | Type_specifier IDENTIFIER '[' INT_NUM ']' Id_sequence
                     ;
 
 Id_sequence         : Id_sequence IDENTIFIER
-                    | Id_sequence IDENTIFIER '[' INT_NUM ']'
                     |
                     ;
 
@@ -44,7 +43,6 @@ Type_specifier      : FLOAT
                     ;
 
 Assignment          : IDENTIFIER ASSIGN Expression
-                    | IDENTIFIER '[' INT_NUM ']' ASSIGN Expression
                     | Declaration ASSIGN Expression
                     ;
 
@@ -64,7 +62,12 @@ Else                : /* empty */
 Whileloop           : WHILE '(' Condition ')' DO Ending
                     ;
 
-Expression          : Expression Addop T
+Expression 			: Arith_expression
+					| Bool_expression
+					;
+
+
+Arith_expression    : Arith_expression Addop T
                     | T
                     ;
 
@@ -72,9 +75,8 @@ T                   : T Multop F
                     | F
                     ;
 
-F                   : '(' Expression ')'
+F                   : '(' Arith_expression ')'
                     | IDENTIFIER
-                    | IDENTIFIER '[' INT_NUM ']'
                     | INT_NUM
                     ;
 
@@ -85,6 +87,23 @@ Addop               : '+'
 Multop              : '*'
                     | '/'
                     ;
+
+Bool_expression		: Bool_expression ODER Bool_And_Expr
+					| Bool_And_Expr
+					;
+
+Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr
+					| Bool_Not_Expr
+					;
+
+Bool_Not_Expr		: NET Preposition
+					;
+
+Preposition			: IDENTIFIER
+					| INT_NUM
+					| '(' Bool_expression ')'
+					;
+
 %%
 
 #include "../lex/lex.daitsch.c"

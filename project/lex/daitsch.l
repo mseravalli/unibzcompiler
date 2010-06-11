@@ -37,6 +37,11 @@ INT ganz
 FLOAT genau
 VOID nichts
 
+/****************************** Relational operators *****************************************/
+NET net
+UND und
+ODER oder
+
 INT_NUM {DIGIT}*
 
 /* C-others */
@@ -64,6 +69,10 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {FLOAT} { return FLOAT; }
 {VOID} { return VOID; }
 
+{NET} { return NET; }
+{UND} { return UND; }
+{ODER} { return ODER; } 
+
 "+" { return '+'; }
 "-" { return '-'; }
 "*" { return '*'; }
@@ -73,6 +82,8 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 ")" { return ')'; }
 "[" { return '['; }
 "]" { return ']'; }
+
+
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
