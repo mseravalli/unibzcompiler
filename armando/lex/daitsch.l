@@ -13,6 +13,10 @@ ONEC \/\/.*
 MULTIC "/*"([^/]|"/"[^*])*"*/"
 
 /******************************** Statements **********************************/
+/*  */
+ASSIGN isch
+SEMICOL ;
+
 /* Main Program*/
 START hallo
 END pfiati
@@ -24,25 +28,38 @@ ELIF "oder wenn"
 ELSE sunscht
 
 /* Loop statement */
-WHILE solang
+WHILE solong
 DO tua
 DONE passt
 
 /****************************** Types *****************************************/
 INT ganz
-FLOAT genau
+FLOAT gena
+BOOL bool
 VOID nichts
+
+/****************************** Relational operators *****************************************/
+NET net
+UND und
+ODER oder
+TRUE richtig
+FALSE folsch
+EQUALS gleich
+
+INT_NUM {DIGIT}*
+FLOAT_NUM {DIGIT}+"."{DIGIT}+
 
 /* C-others */
 STRING \".*\"
-IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
-
+IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 %%
 
 [ \t\n] { /* discarded characters */ }
 
 {START} { return START; }
 {END} { return END; }
+
+{ASSIGN} { return ASSIGN; }
 
 {IF} { return IF; }
 {THEN} { return THEN; }
@@ -53,19 +70,43 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])
 {DO} { return DO; }
 {DONE} { return DONE; }
 
-INT { return INT; }
-FLOAT { return FLOAT; }
-VOID { return VOID; }
+{INT} { return INT; }
+{FLOAT} { return FLOAT; }
+{BOOL} { return BOOL; }
+{VOID} { return VOID; }
+
+{NET} { return NET; }
+{UND} { return UND; }
+{ODER} { return ODER; } 
+
+{EQUALS} { return EQUALS; }
+
+{TRUE} { return TRUE; } 
+{FALSE} { return FALSE; } 
+
+"+" { return '+'; }
+"-" { return '-'; }
+"*" { return '*'; }
+"/" { return '/'; }
+
+"<" { return '<'; }
+">" { return '>'; }
+
+"(" { return '('; }
+")" { return ')'; }
+"[" { return '['; }
+"]" { return ']'; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }
 
-{STRING} { printf( "String Constant %s\n", yytext); }
+{SEMICOL}   { return SEMICOL; }
+{FLOAT_NUM} { yylval.floatnum = atof(yytext);
+              return FLOAT_NUM; }
 
-{LETTER}({LETTER}|{DIGIT})* { printf( "Identifier %s\n", yytext ); } 
+{INT_NUM}   { yylval.intnum = atoi(yytext);
+              return INT_NUM; }
 
-{DIGIT}* { printf( "Integer %s\n", yytext); }
-
-{DIGITS}?"."{DIGITS}|{DIGITS}"."{DIGITS}? { printf( "Float %s\n", yytext); }
-
+{IDENTIFIER} { yylval.lexeme = strdup(yytext);
+               return IDENTIFIER; }
 %%
