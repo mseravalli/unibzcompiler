@@ -5,14 +5,17 @@
  * email: armando.miraglia@stud-inf.unibz.it                                  *
  * version: 0.1                                                               *
  *                                                                            *
- * last modification: 10/06/10 00:42                                          *
- * last mod. author: Armando                                                  *
+ * last modification: 11/06/10 00:42                                          *
+ * last mod. author: Armando + Manuel                                         *
  *                                                                            *
  ******************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include "headers.h"
+//#include "../lex/lex.daitsch.c"     // contains the constants that we will
+                                    // use to check type;
 
 /******************** String Names Handeling (lexemes) ************************/
 char_node *names = NULL;    // this will contain all the names that are also
@@ -56,6 +59,90 @@ sym_node *add_symbol(int token, char *lexeme, int type) {
 
     return t;
 }
+
+/* TODO
+ * the function is intended to find the entry of the symbol
+ * table storing the information realted to a specific lexeme.
+ * The function returns -1 if the lexeme was not found
+ * in the symbol table otherwise it will return the index
+ * the entry (0, first postion; 1, second position and so
+ * on);
+ */
+
+int find_symbol(char *lexeme) {
+    sym_node *p = tbl_head;
+    char_node *q        = NULL;
+    char      *r        = lexeme;
+    int       found     = 0;
+    int       i;
+    int       position  = -1;
+    int       str_len   = strlen(lexeme);
+
+    // if the table is empty return a "not found" result
+    if(p == NULL) {
+       return -1;
+    }
+
+    // differently start to check the presence of it
+    // in the symbol table
+    while(p != NULL && found == 0 ) {
+        position++;     // step forward
+        q = p->lexeme;
+
+        // start to compare lexemes
+        i = -1;
+        while(q->a != '\0' && i < str_len) {
+            if(q->a != *r) {
+                break;
+            }
+
+            q = q->next;
+            r++;
+            i++;
+        }
+
+        printf("i: %d\n", i);
+        if(q->a != '\0' || i != (str_len-1)) {
+            found = 0;
+        } else {
+            found = 1;
+        }
+
+        p = p->next;
+    }
+
+    if(found == 1) {
+        return position;
+    } else {
+        return -1;
+    }
+}
+
+// TODO
+/*
+int modify_symbol(int index, float val) {
+    sym_node *p = tbl_head;     // locate the symbol
+    char_node *q;
+    int myType;
+
+    // determinate if we have a float or an int and whether
+    // it correspondes to our type
+    if((val - (int) val) == 0 )
+        myType = INT;
+    else
+        myType = FLOAT;
+    if(myType != p->type)
+        return 1;
+   
+    //change the symbol
+    if(p->type == INT)
+        p->ival = (int) val;
+    else if (p->type == FLOAT)
+        p->fval = val;
+
+    return 0;
+}
+*/
 
 /* */
 void print_symbols() {
@@ -169,10 +256,9 @@ void print_lexeme(char_node *start) {
 //int main() {
 // --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
-
+//
 //    first = add_lexeme("qualche dubbio");
 //    second = add_lexeme("uff");
-
 //    printf("@address: %p\n", first);
 //    printf("@address: %p\n", second);
 //    print_lexeme(first);
@@ -182,13 +268,21 @@ void print_lexeme(char_node *start) {
 // --- END ---
 
 // --- PER TESTARE LA SYMBOL TABLE ---
-//    printf("------- Sym Tabel -------\n");
+//    int result;
+//    printf("------- Sym Table -------\n");
 //    print_symbols();
+//
 //    add_symbol(10, "qualche dubbio", 1);
+//    result = find_symbol("qualche dubbio");
+//    printf("result: %d\n", result);
+//
 //    print_symbols();
 //    add_symbol(10, "uff", 2);
+//    result = find_symbol("uff");
+//    printf("result: %d\n", result);
+//
 //    print_symbols();
 // --- END ---
-
+//
 //    return 0;
 //}
