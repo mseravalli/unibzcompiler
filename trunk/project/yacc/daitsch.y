@@ -24,6 +24,7 @@
 %token <lexeme> IDENTIFIER
 
 %type <type> Type_specifier
+%type <type> Id_sequence
 %start Scope
 %%
 
@@ -51,7 +52,13 @@ Declaration         : Type_specifier IDENTIFIER { if( find_symbol($2) == -1 ) {
                                                 } Id_sequence
                     ;
 
-Id_sequence         : Id_sequence IDENTIFIER
+Id_sequence         : Id_sequence IDENTIFIER /*{ if( find_symbol($2) == -1 ) {
+                                                      add_symbol(IDENTIFIER, $2, $1);
+                                                  } else {
+                                                      printf("Sorry, identifier %s already defined\n", $2);
+                                                      exit(1);
+                                                  }
+                                             }*/
                     |
                     ;
 
