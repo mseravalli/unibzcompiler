@@ -29,4 +29,6 @@ typedef struct sym_node {
 
 /******************************************************************************/
 sym_node *add_symbol(int token, char *lexeme, int type);
+int modify_symbol(int index,float val);
+int find_symbol(char *lexeme);
 void print_symbols();
