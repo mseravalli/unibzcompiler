@@ -101,9 +101,7 @@ int find_symbol(char *lexeme) {
             i++;
         }
 
-        if(q->a != '\0' || i != (str_len-1)) {
-            found = 0;
-        } else {
+        if ( !(q->a != '\0' || i != (str_len-1)) ) {
             found = 1;
         }
 

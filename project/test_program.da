@@ -4,7 +4,6 @@ ganz a isch 2;
 a isch 1+2;
 
 bool b isch a;
-bool b isch a;
 
 bool c isch [1 < 2];
 
