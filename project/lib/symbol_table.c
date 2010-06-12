@@ -101,7 +101,6 @@ int find_symbol(char *lexeme) {
             i++;
         }
 
-        printf("i: %d\n", i);
         if(q->a != '\0' || i != (str_len-1)) {
             found = 0;
         } else {
@@ -272,17 +271,20 @@ void print_lexeme(char_node *start) {
 //    printf("------- Sym Table -------\n");
 //    print_symbols();
 //
-//    add_symbol(10, "qualche dubbio", 1);
-//    result = find_symbol("qualche dubbio");
+//    add_symbol(10, "a", 1);
+//    result = find_symbol("a");
 //    printf("result: %d\n", result);
 //
 //    print_symbols();
-//    add_symbol(10, "uff", 2);
-//    result = find_symbol("uff");
+//    add_symbol(10, "b", 2);
+//    result = find_symbol("b");
+//    printf("result: %d\n", result);
+//
+//    add_symbol(10, "c", 2);
+//    result = find_symbol("c");
 //    printf("result: %d\n", result);
 //
 //    print_symbols();
 // --- END ---
-//
 //    return 0;
 //}

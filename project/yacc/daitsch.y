@@ -42,7 +42,13 @@ Statements          : /* empty */
                     | Statements Whileloop
                     ;
 
-Declaration         : Type_specifier IDENTIFIER { add_symbol(IDENTIFIER, $2, $1); } Id_sequence
+Declaration         : Type_specifier IDENTIFIER { if( find_symbol($2) == -1 ) {
+                                                      add_symbol(IDENTIFIER, $2, $1);
+                                                  } else {
+                                                      printf("Sorry, identifier %s already defined\n", $2);
+                                                      exit(1);
+                                                  }
+                                                } Id_sequence
                     ;
 
 Id_sequence         : Id_sequence IDENTIFIER
@@ -128,16 +134,12 @@ Multop              : '*'
                     ;
 
 
-
-
-
-
-
 %%
-
 #include "../lex/lex.daitsch.c"
 
-void yyerror (char *s)
+/* Called by yyparse on error.  */
+void
+yyerror (char const *s)
 {
-fprintf (stderr, "%s\n", s);
+  fprintf (stderr, "%s\n", s);
 }
