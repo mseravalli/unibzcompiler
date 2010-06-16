@@ -13,7 +13,10 @@
     int   type;
 }
 %token START END
-%token INT FLOAT BOOL VOID
+%token <type> INT
+%token <type> FLOAT
+%token <type> BOOL
+%token <type> VOID
 %token TRUE FALSE
 %token NET UND ODER
 %token ASSIGN EQUALS
@@ -23,7 +26,8 @@
 %token <floatnum> FLOAT_NUM
 %token <lexeme> IDENTIFIER
 
-%type <type> Type_specifier
+%type <type> Declaration
+/*%type <type> Type_specifier*/
 %type <type> Id_sequence
 %start Scope
 %%
@@ -43,22 +47,17 @@ Statements          : /* empty */
                     | Statements Whileloop
                     ;
 
+/*
 Declaration         : Type_specifier IDENTIFIER { if( find_symbol($2) == -1 ) {
-                                                      add_symbol(IDENTIFIER, $2, $1);
-                                                  } else {
-                                                      printf("Sorry, identifier %s already defined\n", $2);
-                                                      exit(1);
-                                                  }
-                                                } Id_sequence
+                                                                    add_symbol(IDENTIFIER, $2, $1);
+                                                                } else {
+                                                                    printf("Sorry, identifier %s already defined\n", $2);
+                                                                    exit(1);
+                                                                }
+                                                              } Id_sequence
                     ;
 
-Id_sequence         : Id_sequence IDENTIFIER /*{ if( find_symbol($2) == -1 ) {
-                                                      add_symbol(IDENTIFIER, $2, $1);
-                                                  } else {
-                                                      printf("Sorry, identifier %s already defined\n", $2);
-                                                      exit(1);
-                                                  }
-                                             }*/
+Id_sequence         : Id_sequence IDENTIFIER
                     |
                     ;
 
@@ -66,6 +65,31 @@ Type_specifier      : FLOAT {$$ = FLOAT;}
                     | INT {$$ = INT;}
 					| BOOL {$$ = BOOL;}
                     ;
+
+*/
+
+Declaration
+    : INT { $<type>$ = INT; } Id_sequence
+    | FLOAT { $<type>$ = FLOAT; } Id_sequence
+    | BOOL { $<type>$ = BOOL; } Id_sequence
+    ;
+
+/* In this rule $0 is accessible directly as there is no other */
+/* reduction of any other rules occur before the semantic action is */
+/* reduced. */ 
+Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
+                               add_symbol(IDENTIFIER, $1, $<type>0);
+                           } else {
+                               printf("Sorry, identifier %s already defined\n", $1);
+                               exit(1);
+                           } } 
+            | Id_sequence IDENTIFIER { if( find_symbol($2) == -1 ) {
+                                           add_symbol(IDENTIFIER, $2, $<type>0);
+                                       } else {
+                                           printf("Sorry, identifier %s already defined\n", $2);
+                                           exit(1);
+                                       } }
+            ;
 
 Assignment          : IDENTIFIER ASSIGN Expression
                     | Declaration ASSIGN Expression
