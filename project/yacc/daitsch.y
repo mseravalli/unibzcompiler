@@ -11,6 +11,7 @@
     float floatnum;
     int   intnum;
     int   type;
+	char*   result;
 }
 %token START END
 %token <type> INT
@@ -29,6 +30,21 @@
 %type <type> Declaration
 /*%type <type> Type_specifier*/
 %type <type> Id_sequence
+%type <result> Bool_expression
+%type <result> Bool_And_Expr
+%type <result> Bool_Not_Expr   
+%type <result> Preposition
+%type <result> Rel_Expr 
+%type <result> Arith_expression
+%type <result> T
+%type <result> F
+
+%type <intnum> Relop
+%type <intnum> Addop
+%type <intnum> Multop
+
+
+
 %start Scope
 %%
 
@@ -111,57 +127,58 @@ Else                : /* empty */
 Whileloop           : WHILE '[' Condition ']' DO Ending
                     ;
 
-Expression 			: Bool_Not_Expr
+Expression 			: Bool_expression
 					;
 
 
-Relop				: EQUALS
-					| '<'
-					| '>'
+Relop				: EQUALS {$$ = 3;}
+					| '<'  {$$ = 4;}
+					| '>'  {$$ = 5;}
 					;
 
-Bool_expression		: Bool_expression ODER Bool_And_Expr
-					| Bool_And_Expr
+Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = compare($1, $3, 0);}
+					| Bool_And_Expr {$$ = $1;}
 					;
 
-Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr
-					| Bool_Not_Expr
+Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = compare($1, $3, 1);}
+					| Bool_Not_Expr {$$ = $1;}
 					;
 
-Bool_Not_Expr		: NET Preposition
-					| Preposition
-					| NET Rel_Expr
-					| Rel_Expr
+Bool_Not_Expr		: NET Preposition {$$ = compare($2, "", 2);}
+					| Preposition {$$ = $1;}
+					| NET Rel_Expr {$$ = $2;}
+					| Rel_Expr {$$ = $1;}
 					;
 
-Preposition			: TRUE 
-					| FALSE
-					| '[' Bool_expression ']'
+Preposition			: TRUE {$$ = "1";}
+					| FALSE {$$ = "0";}
+					| '[' Bool_expression ']' {$$ = $2;}
 					;
 
-Rel_Expr			: Rel_Expr Relop Arith_expression
-					| Arith_expression
+Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = compare($1, $3, $2); printf("first %s\n",$1);}
+					| Arith_expression {$$ = $1;}
 					;
 
-Arith_expression    : Arith_expression Addop T
-                    | T
+Arith_expression    : Arith_expression Addop T {$$ = calculate($1, $3, $2);}
+                    | T {$$ = $1;}
                     ;
 
-T                   : T Multop F 
-                    | F
+T                   : T Multop F {$$ = calculate($1, $3, $2);}
+                    | F {$$ = $1;}
                     ;
 
-F                   : '(' Arith_expression ')'
-                    | IDENTIFIER                
-                    | INT_NUM
+F                   : '(' Arith_expression ')' {$$ = $2;}
+                    | IDENTIFIER {$$ = $1;}
+                    | INT_NUM { $$ = itoa($1); }
+					| FLOAT_NUM {$$ = ftoa($1); }
                     ;
 
-Addop               : '+'
-                    | '-'
+Addop               : '+' {$$ = 0;}
+                    | '-' {$$ = 1;}
                     ;
 
-Multop              : '*'
-                    | '/'
+Multop              : '*' {$$ = 2;}
+                    | '/' {$$ = 3;}
                     ;
 
 

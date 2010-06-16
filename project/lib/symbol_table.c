@@ -250,6 +250,79 @@ void print_lexeme(char_node *start) {
     }
 }
 
+char* compare (char* valA, char* valB, int op){
+	
+	printf("compare %s %d %s\n", valA, op, valB);
+
+
+/*
+	switch (op) {
+		
+		//OR operation
+		case 0:
+			return valA || valB;
+			break;
+
+		//AND operation
+		case 1:
+			return valA && valB;
+			break;
+
+		//NOT operation
+		case 2:
+			return !valA;
+			break;
+
+		//EQUALS operation
+		case 3:
+			return valA == valB;
+			break;
+
+		//LESS THAN operation
+		case 4:
+			return valA < valB;
+			break;
+
+		//GREATER THAN operation
+		case 5:
+			return valA > valB;
+			break;
+
+
+		default:
+			return 0;
+			break;
+
+	}
+
+*/
+
+return "compared";
+
+}
+
+char* calculate (char* valA, char* valB, int op){
+
+	return "calculated";
+
+}
+
+char* itoa (int i){
+	char buffer [30]; 
+	sprintf (buffer,"%d",i);
+	return buffer;
+}
+
+
+char* ftoa (float f){
+
+	char buffer2 [50];
+	printf("before %s", buffer2);
+	sprintf (buffer2,"%f",f);
+	return buffer2;
+}
+
+
 //int main() {
 // --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;

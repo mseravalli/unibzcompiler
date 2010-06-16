@@ -1,12 +1,15 @@
 hallo
+
+bool c isch [3 < 6.3];
+
 ganz a isch 2;
 
 a isch 1+2;
 
-bool d d d;
+bool d;
 bool b isch a;
 
-bool c isch [1 < 2];
+
 
 solong [folsch] tua
 passt
@@ -15,7 +18,7 @@ wenn [ 1 > (3+2)] nor
     wenn [richtig] nor
     passt
 
-    wenn [richtig] nor
+    wenn [net richtig] nor
     passt
 passt
 
@@ -24,7 +27,7 @@ sunscht
 passt
 
 wenn [b] nor
-oder wenn [a] nor
+oder wenn [a oder b] nor
 sunscht
 passt
 
