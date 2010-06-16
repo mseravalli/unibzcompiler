@@ -310,15 +310,18 @@ char* calculate (char* valA, char* valB, int op){
 char* itoa (int i){
 	char buffer [30]; 
 	sprintf (buffer,"%d",i);
+	int p = buffer;
+	printf ("buffer points to %d\n",p);
 	return buffer;
 }
 
 
 char* ftoa (float f){
 
-	char buffer2 [50];
-	printf("before %s", buffer2);
+	char buffer2 [40];
 	sprintf (buffer2,"%f",f);
+	int p = buffer2;
+	printf ("buffer points to %d\n",p);
 	return buffer2;
 }
 
