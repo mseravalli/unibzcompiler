@@ -32,3 +32,7 @@ sym_node *add_symbol(int token, char *lexeme, int type);
 int modify_symbol(int index,float val);
 int find_symbol(char *lexeme);
 void print_symbols();
+char* compare (char* a, char* b, int op);
+char* calculate (char* a, char* b, int op);
+char* itoa (int);
+char* ftoa (float);
