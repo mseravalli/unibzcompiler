@@ -96,6 +96,7 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 ")" { return ')'; }
 "[" { return '['; }
 "]" { return ']'; }
+"," { return ','; }
 
 {ONEC} { /* discared comments */ }
 {MULTIC} { /* discared comments */ }

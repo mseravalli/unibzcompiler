@@ -101,16 +101,30 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
                                printf("Sorry, identifier %s already defined\n", $1);
                                exit(1);
                            } } 
-            | Id_sequence IDENTIFIER { if( find_symbol($2) == -1 ) {
-                                           add_symbol(IDENTIFIER, $2, $<type>0);
+			| IDENTIFIER ASSIGN Expression {if( find_symbol($1) == -1 ) {
+						             			add_symbol(IDENTIFIER, $1, $<type>0);
+												modify_symbol($1, $3);
+								           } else {
+								               printf("Sorry, identifier %s already defined\n", $1);
+								               exit(1);
+								           } } 
+            | Id_sequence ',' IDENTIFIER { if( find_symbol($3) == -1 ) {
+                                           add_symbol(IDENTIFIER, $3, $<type>0);
                                        } else {
-                                           printf("Sorry, identifier %s already defined\n", $2);
+                                           printf("Sorry, identifier %s already defined\n", $3);
                                            exit(1);
                                        } }
+			| Id_sequence ',' IDENTIFIER ASSIGN Expression{	if( find_symbol($3) == -1 ) {
+						                     				add_symbol(IDENTIFIER, $3, $<type>0);
+															modify_symbol($3, $5);
+						                           		} else {
+						                               		printf("Sorry, identifier %s already defined\n", $3);
+						                              		exit(1);
+														} }
             ;
 
 Assignment          : IDENTIFIER ASSIGN Expression {modify_symbol($1, $3);}
-                    | Declaration ASSIGN Expression
+                    /*| Declaration ASSIGN Expression*/
                     ;
 
 Condition           : Bool_expression
