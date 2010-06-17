@@ -250,54 +250,124 @@ void print_lexeme(char_node *start) {
     }
 }
 
-char* compare (char* valA, char* valB, int op){
+/* operators are passed as numbers:
+	0 -> OR
+	1 -> AND
+	2 -> NOT
+*/
+char* bool_compare (char* a, char* b, int op){
 	
-	printf("compare %s %d %s\n", valA, op, valB);
+	printf("bool comparing %s %d %s\n", a, op, b);
+
+	int valA = 0;
+	int valB = 0;
+
+	if(a != NULL){
+		//if a is a number or a result
+		if(atoi(a)){
+			valA = atoi(a);
+		}
+		//if a is a lexeme
+		else {
+			//TODO find a in the table and assign its value to valA
+		}
+	}
+
+	if(b != NULL){
+		//if b is a number or a result
+		if(atoi(b)){
+			valB = atoi(b);
+		}
+		//if b is a lexeme
+		else {
+			//TODO find b in the table and assign its value to valB
+		}
+	}
 
 
-/*
 	switch (op) {
 		
 		//OR operation
 		case 0:
-			return valA || valB;
+			return itoa(valA || valB);
 			break;
 
 		//AND operation
 		case 1:
-			return valA && valB;
+			return itoa(valA && valB);
 			break;
 
 		//NOT operation
 		case 2:
-			return !valA;
+			return itoa(!valA);
 			break;
-
-		//EQUALS operation
-		case 3:
-			return valA == valB;
-			break;
-
-		//LESS THAN operation
-		case 4:
-			return valA < valB;
-			break;
-
-		//GREATER THAN operation
-		case 5:
-			return valA > valB;
-			break;
-
 
 		default:
-			return 0;
+			return NULL;
 			break;
 
 	}
 
-*/
+}
 
-return "compared";
+
+/* operators are passed as numbers:
+	0 -> EQUALS
+	1 -> LESS THAN
+	2 -> GREATER THAN
+*/
+char* num_compare (char* a, char* b, int op){
+
+	printf("rel comparing %s %d %s\n", a, op, b);
+
+	float valA = 0;
+	float valB = 0;
+
+	if(a != NULL){
+		//if a is a number or a result
+		if(atof(a)){
+			valA = atof(a);
+		}
+		//if a is a lexeme
+		else {
+			//TODO find a in the table and assign its value to valA
+		}
+	}
+
+	if(b != NULL){
+		//if b is a number or a result
+		if(atof(b)){
+			valB = atof(b);
+		}
+		//if b is a lexeme
+		else {
+			//TODO find b in the table and assign its value to valB
+		}
+	}
+
+
+	switch (op) {
+		
+		//EQUALS operation
+		case 0:
+			return itoa(valA == valB);
+			break;
+
+		//LESS THAN operation
+		case 1:
+			return itoa(valA < valB);
+			break;
+
+		//GREATER THAN operation
+		case 2:
+			return itoa(valA > valB);
+			break;
+
+		default:
+			return NULL;
+			break;
+
+	}
 
 }
 
