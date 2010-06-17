@@ -1,6 +1,6 @@
 hallo
 
-bool c isch [3 < 6.3];
+bool c isch [3 < (3+2) oder richtig];
 
 ganz a isch 2;
 

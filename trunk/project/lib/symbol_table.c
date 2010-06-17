@@ -371,9 +371,63 @@ char* num_compare (char* a, char* b, int op){
 
 }
 
-char* calculate (char* valA, char* valB, int op){
+char* calculate (char* a, char* b, int op){
 
-	return "calculated";
+	printf("calculating %s %d %s\n", a, op, b);
+
+	float valA = 0;
+	float valB = 0;
+
+	if(a != NULL){
+		//if a is a number or a result
+		if(atof(a)){
+			valA = atof(a);
+		}
+		//if a is a lexeme
+		else {
+			//TODO find a in the table and assign its value to valA
+		}
+	}
+
+	if(b != NULL){
+		//if b is a number or a result
+		if(atof(b)){
+			valB = atof(b);
+		}
+		//if b is a lexeme
+		else {
+			//TODO find b in the table and assign its value to valB
+		}
+	}
+
+
+	switch (op) {
+		
+		//SUM
+		case 0:
+			return ftoa(valA + valB);
+			break;
+
+		//SUBTRACTION
+		case 1:
+			return ftoa(valA + valB);
+			break;
+
+		//MULTIPLICATION
+		case 2:
+			return ftoa(valA * valB);
+			break;
+
+		//DIVISION
+		case 3:
+			return ftoa(valA / valB);
+			break;
+
+		default:
+			return NULL;
+			break;
+
+	}
 
 }
 
