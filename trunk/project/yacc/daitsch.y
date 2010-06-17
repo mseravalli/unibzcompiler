@@ -131,20 +131,20 @@ Expression 			: Bool_expression
 					;
 
 
-Relop				: EQUALS {$$ = 3;}
-					| '<'  {$$ = 4;}
-					| '>'  {$$ = 5;}
+Relop				: EQUALS {$$ = 0;}
+					| '<'  {$$ = 1;}
+					| '>'  {$$ = 2;}
 					;
 
-Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = compare($1, $3, 0);}
+Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = bool_compare($1, $3, 0);}
 					| Bool_And_Expr {$$ = $1;}
 					;
 
-Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = compare($1, $3, 1);}
+Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = bool_compare($1, $3, 1);}
 					| Bool_Not_Expr {$$ = $1;}
 					;
 
-Bool_Not_Expr		: NET Preposition {$$ = compare($2, "", 2);}
+Bool_Not_Expr		: NET Preposition {$$ = bool_compare($2, NULL, 2);}
 					| Preposition {$$ = $1;}
 					| NET Rel_Expr {$$ = $2;}
 					| Rel_Expr {$$ = $1;}
@@ -155,7 +155,7 @@ Preposition			: TRUE {$$ = "1";}
 					| '[' Bool_expression ']' {$$ = $2;}
 					;
 
-Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = compare($1, $3, $2); }
+Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = num_compare($1, $3, $2); }
 					| Arith_expression {$$ = $1;}
 					;
 
