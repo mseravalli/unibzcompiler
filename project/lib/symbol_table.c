@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "headers.h"
 //#include "../lex/lex.daitsch.c"     // contains the constants that we will
                                     // use to check type;
@@ -134,23 +135,44 @@ sym_node* getSymNode(int position){
 
 
 
-// TODO
 int modify_symbol(char* lexeme, char* v) {
     sym_node *p;     // locate the symbol
     char myType;
 
-	float val = atof(v);
+	float val;
+	
+	if(isdigit(v[0]) || v[0] == '-'){
+		val = atof(v);
+	}
+	//if v is a lexeme
+	else {
+		sym_node *p = NULL;
+		if(getSymNode(find_symbol(v)) != NULL){
+			p = getSymNode(find_symbol(v));
+			val = p->fval;
+		} else {
+			printf("error: %s never declared\n", v);
+			return 1;
+		}
+	}
+
 
 	p = getSymNode(find_symbol(lexeme));
 
     // determinate if we have a float or an int and whether
     // it correspondes to our type
-    if((val - (int) val) == 0 )
+    if((val - (int) val) == 0 ){
         myType = 'i';
+	}
     else
         myType = 'f';
+
+	printf("the value is %s %f type: %c \n", v, val, myType);
+
     if(myType != p->type)
         return 1;
+
+	
    
     //change the symbol
     if(p->type == 'i'){
