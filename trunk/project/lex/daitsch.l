@@ -34,7 +34,7 @@ DONE passt
 
 /****************************** Types *****************************************/
 INT ganz
-FLOAT gena
+FLOAT genau
 BOOL bool
 VOID nichts
 
