@@ -1,43 +1,43 @@
 hallo
 
-bool c isch [3 < (-3+2) oder richtig];
-ganz g isch 3, f isch 5;
-ganz a isch 2;
-ganz d;
+	bool a isch [3 < (-3+2) oder richtig];
+	ganz b isch 2, c isch 3;
+	ganz d isch 2;
+	genau e;
 
 
-d isch a + 2;
+	d isch a + 2;
 
 
-ganz b isch a;
+	ganz f isch a;
 
+	e isch a + f + 0.1;
 
+	solong [folsch und [richtig oder folsch]] tua
+	passt
 
-solong [folsch und [richtig oder folsch]] tua
-passt
+	wenn [ 1 > (3+2)] nor
+		wenn [richtig] nor
+		passt
 
-wenn [ 1 > (3+2)] nor
-    wenn [richtig] nor
-    passt
+		wenn [net richtig] nor
+		passt
+	passt
 
-    wenn [net richtig] nor
-    passt
-passt
+	wenn [ richtig und folsch ] nor
+	sunscht
+	passt
 
-wenn [ richtig und folsch ] nor
-sunscht
-passt
+	wenn [b] nor
+	oder wenn [a oder b] nor
+	sunscht
+	passt
 
-wenn [b] nor
-oder wenn [a oder b] nor
-sunscht
-passt
-
-wenn [richtig] nor
-oder wenn [folsch] nor
-oder wenn [richtig] nor
-oder wenn [folsch] nor
-sunscht
-passt
+	wenn [richtig] nor
+	oder wenn [folsch] nor
+	oder wenn [richtig] nor
+	oder wenn [folsch] nor
+	sunscht
+	passt
 
 pfiati

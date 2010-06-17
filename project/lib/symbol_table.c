@@ -167,15 +167,25 @@ int modify_symbol(char* lexeme, char* v) {
     else
         myType = 'f';
 
-	//printf("the value is %s %f type: %c \n", v, val, myType);
 
-    if(myType != p->type)
+	if(val == 0 || val == 1)
+		myType = 'b';
+
+	//printf("the value is %f type: %c \n", val, myType);
+	//printf("variable type  %c actual type: %c \n", p->type, myType);
+    
+	/*if(myType != p->type)
         return 1;
+	*/
 
 	
-   
+
+	//type check
+	if( !isCorrectType(p->type, myType) ){
+		return 1;
+	}
     //change the symbol
-    if(p->type == 'i'){
+    if(p->type == 'i' || p->type == 'b'){
         p->ival = (int) val;
 		p->fval = (int) val;
 	}
@@ -183,6 +193,32 @@ int modify_symbol(char* lexeme, char* v) {
         p->fval = val;
 
     return 0;
+}
+
+int isCorrectType(char a, char b){
+
+	if(a == b) {
+		return 1;
+	}
+
+	switch (a) {
+
+	case 'i':
+		if(b != 'f')
+			return 1;
+		else
+			return 0;
+
+	case 'f':
+		return 1;
+
+	case 'b':
+		return 0;
+
+	default:
+		return 0;
+	}
+
 }
 
 
@@ -199,7 +235,7 @@ void print_symbols() {
             print_lexeme(p->lexeme);
             printf(" ival %d", p->ival);
             printf(" fval %f", p->fval);
-            printf(" type %d", p->type);
+            printf(" type %c", p->type);
             printf("\n");
             p = p->next;
         }
