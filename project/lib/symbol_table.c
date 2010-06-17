@@ -167,7 +167,7 @@ int modify_symbol(char* lexeme, char* v) {
     else
         myType = 'f';
 
-	printf("the value is %s %f type: %c \n", v, val, myType);
+	//printf("the value is %s %f type: %c \n", v, val, myType);
 
     if(myType != p->type)
         return 1;
@@ -479,8 +479,8 @@ char* calculate (char* a, char* b, char op){
 	}
 
 
-	printf("calculating %s %c %s ", a, op, b);
-	printf("where %s = %f and %s = %f \n", a, valA, b, valB);
+	//printf("calculating %s %c %s ", a, op, b);
+	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
 
 	switch (op) {
 		
