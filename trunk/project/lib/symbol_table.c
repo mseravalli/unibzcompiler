@@ -50,7 +50,7 @@ sym_node *add_symbol(int token, char *lexeme, int type) {
     t->next = NULL;
 
     // p could be NULL if the symbol table is empty (so is treated
-    // as a special caae
+    // as a special case
     if(p == NULL) {
         tbl_head = t;
     } else {
@@ -114,6 +114,25 @@ int find_symbol(char *lexeme) {
         return -1;
     }
 }
+
+sym_node* getSymNode(int position){
+
+	if(position == -1){
+		return NULL;
+	}
+
+	sym_node *p = tbl_head;
+
+	int i;
+
+	for(i = 0; i < position; i++ ){
+		p = p->next;
+	}
+
+	return p;
+}
+
+
 
 // TODO
 /*
@@ -255,50 +274,65 @@ void print_lexeme(char_node *start) {
 	1 -> AND
 	2 -> NOT
 */
-char* bool_compare (char* a, char* b, int op){
+char* bool_compare (char* a, char* b, char op){
 	
-	printf("bool comparing %s %d %s\n", a, op, b);
-
 	int valA = 0;
 	int valB = 0;
 
 	if(a != NULL){
 		//if a is a number or a result
-		if(atoi(a)){
+		if(isdigit(a[0]) || a[0] == '-'){
 			valA = atoi(a);
 		}
 		//if a is a lexeme
 		else {
-			//TODO find a in the table and assign its value to valA
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(a)) != NULL){
+				p = getSymNode(find_symbol(a));
+				valA = p->ival;
+			} else {
+				printf("error: %s never declared\n", a);
+				return NULL;
+			}
+			
 		}
 	}
 
 	if(b != NULL){
 		//if b is a number or a result
-		if(atoi(b)){
+		if(isdigit(b[0]) || b[0] == '-'){
 			valB = atoi(b);
 		}
 		//if b is a lexeme
 		else {
-			//TODO find b in the table and assign its value to valB
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(b)) != NULL){
+				p = getSymNode(find_symbol(b));
+				valB = p->ival;
+			} else {
+				printf("error: %s never declared\n", b);
+				return NULL;
+			}
 		}
 	}
 
 
+	//printf("bool comparing %s %c %s where %s is %d and %s is %d\n", a, op, b, a, valA, b, valB);
+
 	switch (op) {
 		
 		//OR operation
-		case 0:
+		case '|':
 			return itoa(valA || valB);
 			break;
 
 		//AND operation
-		case 1:
+		case '&':
 			return itoa(valA && valB);
 			break;
 
 		//NOT operation
-		case 2:
+		case '!':
 			return itoa(!valA);
 			break;
 
@@ -311,55 +345,65 @@ char* bool_compare (char* a, char* b, int op){
 }
 
 
-/* operators are passed as numbers:
-	0 -> EQUALS
-	1 -> LESS THAN
-	2 -> GREATER THAN
-*/
-char* num_compare (char* a, char* b, int op){
+char* num_compare (char* a, char* b, char op){
 
-	printf("rel comparing %s %d %s\n", a, op, b);
 
 	float valA = 0;
 	float valB = 0;
 
 	if(a != NULL){
 		//if a is a number or a result
-		if(atof(a)){
+		if(isdigit(a[0]) || a[0] == '-'){
 			valA = atof(a);
 		}
 		//if a is a lexeme
 		else {
-			//TODO find a in the table and assign its value to valA
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(a)) != NULL){
+				p = getSymNode(find_symbol(a));
+				valA = p->fval;
+			} else {
+				printf("error: %s never declared\n", a);
+				return NULL;
+			}
 		}
 	}
 
 	if(b != NULL){
 		//if b is a number or a result
-		if(atof(b)){
+		if(isdigit(b[0]) || b[0] == '-'){
 			valB = atof(b);
 		}
 		//if b is a lexeme
 		else {
-			//TODO find b in the table and assign its value to valB
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(b)) != NULL){
+				p = getSymNode(find_symbol(b));
+				valB = p->fval;
+			} else {
+				printf("error: %s never declared\n", b);
+				return NULL;
+			}
 		}
 	}
 
+	//printf("rel comparing %s %c %s ", a, op, b);
+	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
 
 	switch (op) {
 		
 		//EQUALS operation
-		case 0:
+		case '=':
 			return itoa(valA == valB);
 			break;
 
 		//LESS THAN operation
-		case 1:
+		case '<':
 			return itoa(valA < valB);
 			break;
 
 		//GREATER THAN operation
-		case 2:
+		case '>':
 			return itoa(valA > valB);
 			break;
 
@@ -371,55 +415,71 @@ char* num_compare (char* a, char* b, int op){
 
 }
 
-char* calculate (char* a, char* b, int op){
-
-	printf("calculating %s %d %s\n", a, op, b);
+char* calculate (char* a, char* b, char op){
 
 	float valA = 0;
 	float valB = 0;
 
 	if(a != NULL){
 		//if a is a number or a result
-		if(atof(a)){
+		if(isdigit(a[0]) || a[0] == '-'){
 			valA = atof(a);
 		}
 		//if a is a lexeme
 		else {
-			//TODO find a in the table and assign its value to valA
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(a)) != NULL){
+				p = getSymNode(find_symbol(a));
+				valA = p->fval;
+			} else {
+				printf("error: %s never declared\n", a);
+				return NULL;
+			}
 		}
 	}
 
+	
 	if(b != NULL){
 		//if b is a number or a result
-		if(atof(b)){
+		if(isdigit(b[0]) || b[0] == '-'){
 			valB = atof(b);
 		}
 		//if b is a lexeme
 		else {
-			//TODO find b in the table and assign its value to valB
+			sym_node *p = NULL;
+			if(getSymNode(find_symbol(b)) != NULL){
+				p = getSymNode(find_symbol(b));
+				valB = p->fval;
+			} else {
+				printf("error: %s never declared\n", b);
+				return NULL;
+			}
 		}
 	}
 
 
+	//printf("calculating %s %c %s ", a, op, b);
+	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
+
 	switch (op) {
 		
 		//SUM
-		case 0:
+		case '+':
 			return ftoa(valA + valB);
 			break;
 
 		//SUBTRACTION
-		case 1:
+		case '-':
 			return ftoa(valA + valB);
 			break;
 
 		//MULTIPLICATION
-		case 2:
+		case '*':
 			return ftoa(valA * valB);
 			break;
 
 		//DIVISION
-		case 3:
+		case '/':
 			return ftoa(valA / valB);
 			break;
 

@@ -1,10 +1,10 @@
 hallo
 
-bool c isch [3 < (3+2) oder richtig];
+bool c isch [3 < (-3+2) oder richtig];
 
 ganz a isch 2;
 
-a isch 1+2;
+a isch c+a;
 
 bool d;
 bool b isch a;
