@@ -30,7 +30,7 @@ void print_lexeme(char_node *start);
 
 /******************************************************************************/
 /* */
-sym_node *add_symbol(int token, char *lexeme, int type) {
+sym_node *add_symbol(int token, char *lexeme, char type) {
     sym_node *p = tbl_head;
     sym_node *t;
 
@@ -135,30 +135,34 @@ sym_node* getSymNode(int position){
 
 
 // TODO
-/*
-int modify_symbol(int index, float val) {
-    sym_node *p = tbl_head;     // locate the symbol
-    char_node *q;
-    int myType;
+int modify_symbol(char* lexeme, char* v) {
+    sym_node *p;     // locate the symbol
+    char myType;
+
+	float val = atof(v);
+
+	p = getSymNode(find_symbol(lexeme));
 
     // determinate if we have a float or an int and whether
     // it correspondes to our type
     if((val - (int) val) == 0 )
-        myType = INT;
+        myType = 'i';
     else
-        myType = FLOAT;
+        myType = 'f';
     if(myType != p->type)
         return 1;
    
     //change the symbol
-    if(p->type == INT)
+    if(p->type == 'i'){
         p->ival = (int) val;
-    else if (p->type == FLOAT)
+		p->fval = (int) val;
+	}
+    else if (p->type == 'f')
         p->fval = val;
 
     return 0;
 }
-*/
+
 
 /* */
 void print_symbols() {
@@ -269,11 +273,6 @@ void print_lexeme(char_node *start) {
     }
 }
 
-/* operators are passed as numbers:
-	0 -> OR
-	1 -> AND
-	2 -> NOT
-*/
 char* bool_compare (char* a, char* b, char op){
 	
 	int valA = 0;
@@ -458,8 +457,8 @@ char* calculate (char* a, char* b, char op){
 	}
 
 
-	//printf("calculating %s %c %s ", a, op, b);
-	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
+	printf("calculating %s %c %s ", a, op, b);
+	printf("where %s = %f and %s = %f \n", a, valA, b, valB);
 
 	switch (op) {
 		

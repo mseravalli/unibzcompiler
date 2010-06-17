@@ -10,7 +10,7 @@
     char* lexeme;
     float floatnum;
     int   intnum;
-    int   type;
+    char   type;
 	char*   result;
 	char operatorType;
 }
@@ -31,6 +31,7 @@
 %type <type> Declaration
 /*%type <type> Type_specifier*/
 %type <type> Id_sequence
+%type <result> Expression
 %type <result> Bool_expression
 %type <result> Bool_And_Expr
 %type <result> Bool_Not_Expr   
@@ -86,9 +87,9 @@ Type_specifier      : FLOAT {$$ = FLOAT;}
 */
 
 Declaration
-    : INT { $<type>$ = INT; } Id_sequence
-    | FLOAT { $<type>$ = FLOAT; } Id_sequence
-    | BOOL { $<type>$ = BOOL; } Id_sequence
+    : INT { $<type>$ = 'i'; } Id_sequence
+    | FLOAT { $<type>$ = 'f'; } Id_sequence
+    | BOOL { $<type>$ = 'b'; } Id_sequence
     ;
 
 /* In this rule $0 is accessible directly as there is no other */
@@ -108,7 +109,7 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
                                        } }
             ;
 
-Assignment          : IDENTIFIER ASSIGN Expression
+Assignment          : IDENTIFIER ASSIGN Expression {modify_symbol($1, $3);}
                     | Declaration ASSIGN Expression
                     ;
 
