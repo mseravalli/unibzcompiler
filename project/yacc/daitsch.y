@@ -12,6 +12,7 @@
     int   intnum;
     int   type;
 	char*   result;
+	char operatorType;
 }
 %token START END
 %token <type> INT
@@ -39,9 +40,9 @@
 %type <result> T
 %type <result> F
 
-%type <intnum> Relop
-%type <intnum> Addop
-%type <intnum> Multop
+%type <operatorType> Relop
+%type <operatorType> Addop
+%type <operatorType> Multop
 
 
 
@@ -131,20 +132,20 @@ Expression 			: Bool_expression
 					;
 
 
-Relop				: EQUALS {$$ = 0;}
-					| '<'  {$$ = 1;}
-					| '>'  {$$ = 2;}
+Relop				: EQUALS {$$ = '=';}
+					| '<'  {$$ = '<';}
+					| '>'  {$$ = '>';}
 					;
 
-Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = bool_compare($1, $3, 0);}
+Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = bool_compare($1, $3, '|');}
 					| Bool_And_Expr {$$ = $1;}
 					;
 
-Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = bool_compare($1, $3, 1);}
+Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = bool_compare($1, $3, '&');}
 					| Bool_Not_Expr {$$ = $1;}
 					;
 
-Bool_Not_Expr		: NET Preposition {$$ = bool_compare($2, NULL, 2);}
+Bool_Not_Expr		: NET Preposition {$$ = bool_compare($2, NULL, '!');}
 					| Preposition {$$ = $1;}
 					| NET Rel_Expr {$$ = $2;}
 					| Rel_Expr {$$ = $1;}
@@ -173,12 +174,12 @@ F                   : '(' Arith_expression ')' {$$ = $2;}
 					| FLOAT_NUM {$$ = ftoa($1); }
                     ;
 
-Addop               : '+' {$$ = 0;}
-                    | '-' {$$ = 1;}
+Addop               : '+' {$$ = '+';}
+                    | '-' {$$ = '-';}
                     ;
 
-Multop              : '*' {$$ = 2;}
-                    | '/' {$$ = 3;}
+Multop              : '*' {$$ = '*';}
+                    | '/' {$$ = '/';}
                     ;
 
 

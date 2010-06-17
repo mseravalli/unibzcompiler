@@ -31,9 +31,10 @@ typedef struct sym_node {
 sym_node *add_symbol(int token, char *lexeme, int type);
 int modify_symbol(int index,float val);
 int find_symbol(char *lexeme);
+sym_node* getSymNode(int position);
 void print_symbols();
-char* bool_compare (char* a, char* b, int op);
-char* num_compare (char* a, char* b, int op);
-char* calculate (char* a, char* b, int op);
+char* bool_compare (char* a, char* b, char op);
+char* num_compare (char* a, char* b, char op);
+char* calculate (char* a, char* b, char op);
 char* itoa (int);
 char* ftoa (float);

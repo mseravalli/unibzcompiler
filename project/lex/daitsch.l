@@ -46,8 +46,8 @@ TRUE richtig
 FALSE folsch
 EQUALS gleich
 
-INT_NUM {DIGIT}*
-FLOAT_NUM {DIGIT}+"."{DIGIT}+
+INT_NUM "-"*{DIGIT}*
+FLOAT_NUM "-"*{DIGIT}+"."{DIGIT}+
 
 /* C-others */
 STRING \".*\"
