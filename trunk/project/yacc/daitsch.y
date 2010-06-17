@@ -155,7 +155,7 @@ Preposition			: TRUE {$$ = "1";}
 					| '[' Bool_expression ']' {$$ = $2;}
 					;
 
-Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = compare($1, $3, $2); printf("first %s\n",$1);}
+Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = compare($1, $3, $2); }
 					| Arith_expression {$$ = $1;}
 					;
 
