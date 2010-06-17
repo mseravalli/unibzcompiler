@@ -24,12 +24,12 @@ typedef struct sym_node {
     char_node           *lexeme;
     float               fval;
     int                 ival;
-    int                 type;
+    char                type;
 } sym_node;
 
 /******************************************************************************/
-sym_node *add_symbol(int token, char *lexeme, int type);
-int modify_symbol(int index,float val);
+sym_node *add_symbol(int token, char *lexeme, char type);
+int modify_symbol(char* lexeme, char* v);
 int find_symbol(char *lexeme);
 sym_node* getSymNode(int position);
 void print_symbols();
