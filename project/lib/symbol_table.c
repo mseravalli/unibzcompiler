@@ -116,16 +116,14 @@ int find_symbol(char *lexeme) {
     }
 }
 
-sym_node* getSymNode(int position){
+sym_node *getSymNode(int position){
+	int i;
 
 	if(position == -1){
 		return NULL;
 	}
 
 	sym_node *p = tbl_head;
-
-	int i;
-
 	for(i = 0; i < position; i++ ){
 		p = p->next;
 	}
@@ -134,7 +132,8 @@ sym_node* getSymNode(int position){
 }
 
 
-
+// FIXME: non serve in parte questo metodo. Serve solo
+//        inttoreal() per la conversione del tipo
 int modify_symbol(char* lexeme, char* v) {
     sym_node *p;     // locate the symbol
     char myType;
@@ -171,15 +170,6 @@ int modify_symbol(char* lexeme, char* v) {
 	if(val == 0 || val == 1)
 		myType = 'b';
 
-	//printf("the value is %f type: %c \n", val, myType);
-	//printf("variable type  %c actual type: %c \n", p->type, myType);
-    
-	/*if(myType != p->type)
-        return 1;
-	*/
-
-	
-
 	//type check
 	if( !isCorrectType(p->type, myType) ){
 		return 1;
@@ -196,7 +186,6 @@ int modify_symbol(char* lexeme, char* v) {
 }
 
 int isCorrectType(char a, char b){
-
 	if(a == b) {
 		return 1;
 	}
@@ -208,7 +197,6 @@ int isCorrectType(char a, char b){
 			return 1;
 		else
 			return 0;
-
 	case 'f':
 		return 1;
 
@@ -218,7 +206,6 @@ int isCorrectType(char a, char b){
 	default:
 		return 0;
 	}
-
 }
 
 
@@ -373,38 +360,28 @@ char* bool_compare (char* a, char* b, char op){
 		}
 	}
 
-
-	//printf("bool comparing %s %c %s where %s is %d and %s is %d\n", a, op, b, a, valA, b, valB);
-
 	switch (op) {
-		
 		//OR operation
 		case '|':
 			return itoa(valA || valB);
 			break;
-
 		//AND operation
 		case '&':
 			return itoa(valA && valB);
 			break;
-
 		//NOT operation
 		case '!':
 			return itoa(!valA);
 			break;
-
 		default:
 			return NULL;
 			break;
-
 	}
-
 }
 
-
+// FIXME: utile, ma non con i char (itoa e ftoa vanno
+//        rimossi)
 char* num_compare (char* a, char* b, char op){
-
-
 	float valA = 0;
 	float valB = 0;
 
@@ -448,32 +425,28 @@ char* num_compare (char* a, char* b, char op){
 	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
 
 	switch (op) {
-		
 		//EQUALS operation
 		case '=':
 			return itoa(valA == valB);
 			break;
-
 		//LESS THAN operation
 		case '<':
 			return itoa(valA < valB);
 			break;
-
 		//GREATER THAN operation
 		case '>':
 			return itoa(valA > valB);
 			break;
-
 		default:
 			return NULL;
 			break;
-
 	}
-
 }
 
+// FIXME: da modificare; questo deve diventare
+//        tipo "emit" che si trova negli esempi delle
+//        slide
 char* calculate (char* a, char* b, char op){
-
 	float valA = 0;
 	float valB = 0;
 
@@ -514,40 +487,30 @@ char* calculate (char* a, char* b, char op){
 		}
 	}
 
-
-	//printf("calculating %s %c %s ", a, op, b);
-	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
-
 	switch (op) {
-		
 		//SUM
 		case '+':
 			return ftoa(valA + valB);
 			break;
-
 		//SUBTRACTION
 		case '-':
 			return ftoa(valA + valB);
 			break;
-
 		//MULTIPLICATION
 		case '*':
 			return ftoa(valA * valB);
 			break;
-
 		//DIVISION
 		case '/':
 			return ftoa(valA / valB);
 			break;
-
 		default:
 			return NULL;
 			break;
-
 	}
-
 }
 
+// FIXME: da rimuovere
 char* itoa (int i){
 	char* buffer = (char*) malloc (30); 
 	sprintf (buffer,"%d",i);	
@@ -555,6 +518,7 @@ char* itoa (int i){
 }
 
 
+// FIXME: da rimuovere
 char* ftoa (float f){
 	char* buffer = (char*) malloc (30); 
 	sprintf (buffer,"%f",f);
