@@ -109,18 +109,18 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
 								               exit(1);
 								           } } 
             | Id_sequence ',' IDENTIFIER { if( find_symbol($3) == -1 ) {
-                                           add_symbol(IDENTIFIER, $3, $<type>0);
-                                       } else {
-                                           printf("Sorry, identifier %s already defined\n", $3);
-                                           exit(1);
-                                       } }
+                                               add_symbol(IDENTIFIER, $3, $<type>0);
+                                           } else {
+                                               printf("Sorry, identifier %s already defined\n", $3);
+                                               exit(1);
+                                           } }
 			| Id_sequence ',' IDENTIFIER ASSIGN Expression{	if( find_symbol($3) == -1 ) {
-						                     				add_symbol(IDENTIFIER, $3, $<type>0);
-															modify_symbol($3, $5);
-						                           		} else {
-						                               		printf("Sorry, identifier %s already defined\n", $3);
-						                              		exit(1);
-														} }
+						                     				    add_symbol(IDENTIFIER, $3, $<type>0);
+															    modify_symbol($3, $5);
+						                           		    } else {
+						                               		    printf("Sorry, identifier %s already defined\n", $3);
+						                              		    exit(1);
+														    } }
             ;
 
 Assignment          : IDENTIFIER ASSIGN Expression {modify_symbol($1, $3);}
