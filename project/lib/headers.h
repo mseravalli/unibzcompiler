@@ -40,6 +40,7 @@ typedef struct scope {
 /******************************************************************************/
 scope       *init_scope(sym_node *parent, char_node *lexeme);
 int         exit_scope();
+char_node   *generate_scope_name();
 sym_node    *add_symbol(int token, char *lexeme, int line,int type, scope* nscope);
 //int         isCorrectType(char a, char b);
 int         find_symbol(char *lexeme);
