@@ -52,11 +52,14 @@ scope
 }
 
 /*
- * adding a new symbol into the actual symbol table, that is different
+ * Adding a new symbol into the actual symbol table, that is different
  * depending on what the actual_scpe global variable is pointing to.
+ * If the "nscope" parameter is different from NULL the symbol is
+ * considered as a scope so a new scope will be produced (and the
+ * new symbol table).
  */
 sym_node
-*add_symbol(int token, char *lexeme, int line,int type, scope *nscope) {
+*add_symbol(int token, char *lexeme, int line, int type, scope *nscope) {
     sym_node *p = actual_scope->symtbl; // obtain the head of the actual scope
                                         // symbol table
     sym_node *t;
@@ -73,7 +76,14 @@ sym_node
     t->lexeme = add_lexeme(lexeme);
     t->line = line;
     t->type = type;
+    t->nscope = nscope;
     t->next = NULL;
+
+    // if the symbol represents a new scope init the new scope
+    // and assign it to the the symbolt in the table
+    if(nscope != NULL) {
+        
+    }
 
     // p could be NULL if the symbol table is empty (so is treated
     // as a special case
