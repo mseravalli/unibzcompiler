@@ -16,6 +16,9 @@
 #include <ctype.h>
 #include "headers.h"
 
+/************************* Others *********************************************/
+int             scope_cnt = 0;  // used for generating name scopes
+
 /******************** String Names Handeling (lexemes) ************************/
 char_node       *names = NULL;  // this will contain all the names that are also
                                 // called lexemes (values of the identifiers)
@@ -39,7 +42,7 @@ void            print_lexeme(char_node *start);
  * the lexeme has to be already in the lexeme structure.
  */
 scope
-*init_scope(sym_node *parent, char_node *lexeme) {
+*init_scope(scope *parent, char_node *lexeme) {
     scope *t;      // temporary scope node
     // new scope
     t = (scope *)malloc(sizeof(scope *));
@@ -49,6 +52,38 @@ scope
 
     actual_scope = t;
     return t;
+}
+
+/*
+ * function intended to exit from the actual scope and step back
+ * to the previous one. It checks if we are in the main scope: in this
+ * case we cannot step back (no parent is defined).
+ * Returns 0 if the execution has been correctly executed,
+ * 1 when parent is set to NULL.
+ */
+int
+exit_scope() {
+    if(actual_scope->parent == NULL) {
+        return 1;
+    } else {
+        actual_scope = actual_scope->parent;
+        return 0;
+    }
+}
+
+/*
+ * this function generates a new name for the scope and saves it
+ * into the lexeme structure.
+ */
+char_node
+*generate_scope_name() {
+    char t;
+    char_node *s;
+
+    t = scope_cnt++ + '0';
+    s = add_lexeme( strcat("scope", &t) );
+    printf("%p\n", s);
+    return s;
 }
 
 /*
@@ -82,14 +117,20 @@ sym_node
     // if the symbol represents a new scope init the new scope
     // and assign it to the the symbolt in the table
     if(is_scope != 0) {
-        t->nscope = init_scope(actual_scope, generate_scope_neme());
+        t->nscope = init_scope(actual_scope, t->lexeme);
     }
 
     // p could be NULL if the symbol table is empty (so is treated
     // as a special case
     if(p == NULL) {
-        actual_scope->symtbl = t;       // add directly into the actual
-                                        // scope's symbol table
+        // if we have initialized a new scope the actual scope is changed
+        // so we have to add the entry in the previos scope.
+        // Differently we can directly add the entry into the symbol table
+        if(is_scope != 0) {
+            actual_scope->parent->symtbl = t;
+        } else {
+            actual_scope->symtbl = t;
+        }
     } else {
         p->next = t;
     }
@@ -254,9 +295,19 @@ int isCorrectType(char a, char b){
 */
 
 /*
- * prints the infos of a scope 
+ * function that prints the whole symbol table (that is
+ * the main symbol table and the scopes
  */
-void print_scope() {
+void
+print_all() {
+    //TODO
+}
+
+/*
+ * prints the infos of the current scope 
+ */
+void
+print_scope() {
     scope *p = actual_scope;
 
     if(p == NULL) {
@@ -276,7 +327,8 @@ void print_scope() {
  * TODO: not printing scopse but only the actual scope's
  *       symbol table.
  */
-void print_symbols() {
+void
+print_symbols() {
     sym_node *p = actual_scope->symtbl;
 
     if(p == NULL) {
@@ -288,7 +340,7 @@ void print_symbols() {
             print_lexeme(p->lexeme);
             printf(" line: %d", p->line);
             printf(" type: %d", p->type);
-            printf(" scope: %d", p->nscope);
+            printf(" scope: %p", p->nscope);
             printf("\n");
             p = p->next;
         }
@@ -615,10 +667,21 @@ int main() {
     add_symbol(10, "c", 2, 1, 0);
     result = find_symbol("c");
 
-    printf("------- Scope -------\n");
-    print_scope();
-    printf("------- Sym Table -------\n");
-    print_symbols();
+    add_symbol(10, "scope1", 2, 1, 1);
+    result = find_symbol("c");
+
+    exit_scope();
+
+    add_symbol(10, "scope2", 2, 1, 1);
+    result = find_symbol("c");
+
+    add_symbol(10, "b", 2, 1, 0);
+    result = find_symbol("b");
+
+    add_symbol(10, "c", 2, 1, 0);
+    result = find_symbol("c");
+    
+    exit_scope();
 // --- END ---
     return 0;
 }
