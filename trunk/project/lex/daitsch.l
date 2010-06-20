@@ -54,7 +54,9 @@ STRING \".*\"
 IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 %%
 
-[ \t\n] { /* discarded characters */ }
+[ \t] { /* discarded characters */ }
+[\n] { /* each time a new value line is found increment
+          the line counter */ yyline++; }
 
 {START} { return START; }
 {END} { return END; }
