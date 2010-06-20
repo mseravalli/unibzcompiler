@@ -51,7 +51,7 @@
 %start Scope
 %%
 
-Scope               : Marker Main
+Scope               : Marker Main               {print_symbols();}
                     ;
 
 Marker              : /* emty */                {init();}
