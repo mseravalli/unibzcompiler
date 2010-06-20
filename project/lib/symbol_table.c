@@ -306,15 +306,6 @@ int isCorrectType(char a, char b){
 */
 
 /*
- * function that prints the whole symbol table (that is
- * the main symbol table and the scopes
- */
-void
-print_all() {
-    //TODO
-}
-
-/*
  * prints the infos of the current scope 
  */
 void

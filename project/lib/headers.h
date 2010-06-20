@@ -46,7 +46,6 @@ sym_node    *add_symbol(int token, char *lexeme, int line,int type, int is_scope
 //int         isCorrectType(char a, char b);
 int         find_symbol(char *lexeme);
 //sym_node    *get_node(int position);
-void        print_all();
 void        print_symbols();
 void        print_scope();
 //char*       bool_compare(char* a, char* b, char op);
