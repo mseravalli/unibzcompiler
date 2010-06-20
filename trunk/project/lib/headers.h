@@ -6,7 +6,7 @@
  * version: 0.1                                                               *
  *                                                                            *
  * last modification: 20/06/10 15:56                                          *
- * last mod. author: Armando                                                  *
+ * last mod. author: Armando + Marco                                          *
  *                                                                            *
  ******************************************************************************/
 
@@ -38,6 +38,7 @@ typedef struct scope {
 } scope;
 
 /******************************************************************************/
+void        init();
 scope       *init_scope(scope *parent, char_node *lexeme);
 int         exit_scope();
 char_node   *generate_scope_name();
