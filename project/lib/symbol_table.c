@@ -5,7 +5,7 @@
  * email: armando.miraglia@stud-inf.unibz.it                                  *
  * version: 0.1                                                               *
  *                                                                            *
- * last modification: 11/06/10 00:42                                          *
+ * last modification: 20/06/10 15:42                                          *
  * last mod. author: Armando + Manuel                                         *
  *                                                                            *
  ******************************************************************************/
@@ -24,7 +24,6 @@ char_node       *names = NULL;  // this will contain all the names that are also
                                 // called lexemes (values of the identifiers)
 
 /******************** Actual Symbol Table *************************************/
-//sym_node        *tbl_head = NULL;   // haad of the symbol table (list imp.)
 scope           *actual_scope = NULL;   // the actual scope 
 scope           *main_scope = NULL;     // the main scope (this pointer is
                                         // never changed otherwise the ref. to
@@ -36,6 +35,18 @@ void            print_lexeme(char_node *start);
 
 /******************************************************************************/
 
+/*
+ * initialization of the necessary data strutures
+ */
+void
+init() {
+    char_node *tmp;
+
+    tmp = add_lexeme("main");               // add the name in the lexemes' list
+    main_scope = init_scope(NULL, tmp);     // initialize the scope
+    actual_scope = main_scope;              // keep track of the actual scope
+    free(tmp);
+}
 /*
  * this function is intended to create a new scope and the releted
  * new symbol table when a new scope is found.
@@ -634,7 +645,7 @@ char* calculate (char* a, char* b, char op){
 }
 */
 
-int main() {
+//int main() {
 // --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
 //
@@ -647,41 +658,38 @@ int main() {
 //    print_lexeme(second);
 //    printf("\n");
 // --- END ---
-
 // --- PER TESTARE LA SYMBOL TABLE ---
-    int result;
-
-    char_node *tmp = add_lexeme("main");  // add the name in the lexemes' list
-    main_scope = init_scope(NULL, tmp);   // initialize the scope
-    actual_scope = main_scope;            // keep track of the actual scope
-    free(tmp);
-
-
-
-    add_symbol(10, "a", 1, 1, 0);
-    result = find_symbol("a");
-
-    add_symbol(10, "b", 2, 1, 0);
-    result = find_symbol("b");
-
-    add_symbol(10, "c", 2, 1, 0);
-    result = find_symbol("c");
-
-    add_symbol(10, "scope1", 2, 1, 1);
-    result = find_symbol("c");
-
-    exit_scope();
-
-    add_symbol(10, "scope2", 2, 1, 1);
-    result = find_symbol("c");
-
-    add_symbol(10, "b", 2, 1, 0);
-    result = find_symbol("b");
-
-    add_symbol(10, "c", 2, 1, 0);
-    result = find_symbol("c");
-    
-    exit_scope();
+//    int result;
+//
+//    char_node *tmp = add_lexeme("main");  // add the name in the lexemes' list
+//    main_scope = init_scope(NULL, tmp);   // initialize the scope
+//    actual_scope = main_scope;            // keep track of the actual scope
+//    free(tmp);
+//
+//    add_symbol(10, "a", 1, 1, 0);
+//    result = find_symbol("a");
+//
+//    add_symbol(10, "b", 2, 1, 0);
+//    result = find_symbol("b");
+//
+//    add_symbol(10, "c", 2, 1, 0);
+//    result = find_symbol("c");
+//
+//    add_symbol(10, "scope1", 2, 1, 1);
+//    result = find_symbol("c");
+//
+//    exit_scope();
+//
+//    add_symbol(10, "scope2", 2, 1, 1);
+//    result = find_symbol("c");
+//
+//    add_symbol(10, "b", 2, 1, 0);
+//    result = find_symbol("b");
+//
+//    add_symbol(10, "c", 2, 1, 0);
+//    result = find_symbol("c");
+//    
+//    exit_scope();
 // --- END ---
-    return 0;
-}
+//    return 0;
+//}

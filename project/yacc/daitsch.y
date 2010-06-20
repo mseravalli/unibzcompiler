@@ -8,8 +8,10 @@
 %}
 
 %union {
-    char* lexeme;
+    char    *lexeme;
     int     type;
+    char    *intnum;
+    char    *floatnum;
 	char*   result;
 	char operatorType;
 }
@@ -49,7 +51,10 @@
 %start Scope
 %%
 
-Scope               : Main              {print_symbols();}
+Scope               : Marker Main
+                    ;
+
+Marker              : /* emty */                {init();}
                     ;
 
 Main                : START Body END;
@@ -64,56 +69,35 @@ Statements          : /* empty */
                     | Statements Whileloop
                     ;
 
-/*
-Declaration         : Type_specifier IDENTIFIER { if( find_symbol($2) == -1 ) {
-                                                                    add_symbol(IDENTIFIER, $2, $1);
-                                                                } else {
-							                                        printf("Error, %s already defined in line %d\n", $1, yyline);
-                                                                    exit(1);
-                                                                }
-                                                              } Id_sequence
-                    ;
-
-Id_sequence         : Id_sequence IDENTIFIER
-                    |
-                    ;
-
-Type_specifier      : FLOAT {$$ = FLOAT;}
-                    | INT {$$ = INT;}
-					| BOOL {$$ = BOOL;}
-                    ;
-
-*/
-
 Declaration
-    : INT { $<type>$ = 'i'; } Id_sequence
-    | FLOAT { $<type>$ = 'f'; } Id_sequence
-    | BOOL { $<type>$ = 'b'; } Id_sequence
+    : INT { $<type>$ = 1001; } Id_sequence
+    | FLOAT { $<type>$ = 1002; } Id_sequence
+    | BOOL { $<type>$ = 1003; } Id_sequence
     ;
 
 /* In this rule $0 is accessible directly as there is no other */
 /* reduction of any other rules occur before the semantic action is */
 /* reduced. */ 
 Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
-                               add_symbol(IDENTIFIER, $1, $<type>0);
+                               add_symbol(IDENTIFIER, $1, yyline, $<type>0, 0);
                            } else {
 							printf("Error, %s already defined in line %d\n", $1, yyline);
                                exit(1);
                            } } 
 			| IDENTIFIER ASSIGN Expression {if( find_symbol($1) == -1 ) {
-						             			add_symbol(IDENTIFIER, $1, $<type>0);
+						             			add_symbol(IDENTIFIER, $1, yyline, $<type>0, 0);
 								           } else {
 							                   printf("Error, %s already defined in line %d\n", $1, yyline);
 								               exit(1);
 								           } } 
             | Id_sequence ',' IDENTIFIER { if( find_symbol($3) == -1 ) {
-                                               add_symbol(IDENTIFIER, $3, $<type>0);
+                                               add_symbol(IDENTIFIER, $3, yyline, $<type>0, 0);
                                            } else {
 							                   printf("Error, %s already defined in line %d\n", $3, yyline);
                                                exit(1);
                                            } }
 			| Id_sequence ',' IDENTIFIER ASSIGN Expression{	if( find_symbol($3) == -1 ) {
-						                     				    add_symbol(IDENTIFIER, $3, $<type>0);
+						                     				    add_symbol(IDENTIFIER, $3, yyline, $<type>0, 0);
 						                           		    } else {
 							                                    printf("Error, %s already defined in line %d\n", $3, yyline);
 						                              		    exit(1);
@@ -149,15 +133,15 @@ Relop				: EQUALS {$$ = '=';}
 					| '>'  {$$ = '>';}
 					;
 
-Bool_expression		: Bool_expression ODER Bool_And_Expr {$$ = bool_compare($1, $3, '|');}
+Bool_expression		: Bool_expression ODER Bool_And_Expr {/*$$ = bool_compare($1, $3, '|');*/}
 					| Bool_And_Expr {$$ = $1;}
 					;
 
-Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {$$ = bool_compare($1, $3, '&');}
+Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {/*$$ = bool_compare($1, $3, '&');*/}
 					| Bool_Not_Expr {$$ = $1;}
 					;
 
-Bool_Not_Expr		: NET Preposition {$$ = bool_compare($2, NULL, '!');}
+Bool_Not_Expr		: NET Preposition {/*$$ = bool_compare($2, NULL, '!');*/}
 					| Preposition {$$ = $1;}
 					| NET Rel_Expr {$$ = $2;}
 					| Rel_Expr {$$ = $1;}
@@ -168,22 +152,22 @@ Preposition			: TRUE {$$ = "1";}
 					| '[' Bool_expression ']' {$$ = $2;}
 					;
 
-Rel_Expr			: Rel_Expr Relop Arith_expression {$$ = num_compare($1, $3, $2); }
+Rel_Expr			: Rel_Expr Relop Arith_expression {/*$$ = num_compare($1, $3, $2);*/ }
 					| Arith_expression {$$ = $1;}
 					;
 
-Arith_expression    : Arith_expression Addop T {$$ = calculate($1, $3, $2);}
+Arith_expression    : Arith_expression Addop T {/*$$ = calculate($1, $3, $2);*/}
                     | T {$$ = $1;}
                     ;
 
-T                   : T Multop F {$$ = calculate($1, $3, $2);}
+T                   : T Multop F {/*$$ = calculate($1, $3, $2);*/}
                     | F {$$ = $1;}
                     ;
 
 F                   : '(' Arith_expression ')' {$$ = $2;}
                     | IDENTIFIER {$$ = $1;}
-                    | INT_NUM { $$ = itoa($1); }
-					| FLOAT_NUM {$$ = ftoa($1); }
+                    | INT_NUM { $$ = $1; }
+					| FLOAT_NUM {$$ = $1; }
                     ;
 
 Addop               : '+' {$$ = '+';}
@@ -204,3 +188,4 @@ yyerror (char const *s)
 {
   fprintf (stderr, "%s\n", s);
 }
+
