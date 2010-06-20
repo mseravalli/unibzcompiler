@@ -43,8 +43,8 @@ scope
     scope *t;      // temporary scope node
     // new scope
     t = (scope *)malloc(sizeof(scope *));
-    t->parent;              // the calling symbol node
-    t->lexeme;              // name of the scope
+    t->parent = parent;     // the calling symbol node
+    t->lexeme = lexeme;     // name of the scope
     t->symtbl = NULL;       // new symbol table
 
     actual_scope = t;
@@ -54,12 +54,12 @@ scope
 /*
  * Adding a new symbol into the actual symbol table, that is different
  * depending on what the actual_scpe global variable is pointing to.
- * If the "nscope" parameter is different from NULL the symbol is
+ * If the "is_scope" parameter is different from 0 the symbol is
  * considered as a scope so a new scope will be produced (and the
  * new symbol table).
  */
 sym_node
-*add_symbol(int token, char *lexeme, int line, int type, scope *nscope) {
+*add_symbol(int token, char *lexeme, int line, int type, int is_scope) {
     sym_node *p = actual_scope->symtbl; // obtain the head of the actual scope
                                         // symbol table
     sym_node *t;
@@ -76,13 +76,13 @@ sym_node
     t->lexeme = add_lexeme(lexeme);
     t->line = line;
     t->type = type;
-    t->nscope = nscope;
-    t->next = NULL;
+    t->nscope = NULL;       // default not a scope
+    t->next = NULL;         // default is the last element
 
     // if the symbol represents a new scope init the new scope
     // and assign it to the the symbolt in the table
-    if(nscope != NULL) {
-        
+    if(is_scope != 0) {
+        t->nscope = init_scope(actual_scope, generate_scope_neme());
     }
 
     // p could be NULL if the symbol table is empty (so is treated
@@ -288,7 +288,7 @@ void print_symbols() {
             print_lexeme(p->lexeme);
             printf(" line: %d", p->line);
             printf(" type: %d", p->type);
-            printf(" scope: %p", p->nscope);
+            printf(" scope: %d", p->nscope);
             printf("\n");
             p = p->next;
         }
@@ -606,13 +606,13 @@ int main() {
 
 
 
-    add_symbol(10, "a", 1, 1, NULL);
+    add_symbol(10, "a", 1, 1, 0);
     result = find_symbol("a");
 
-    add_symbol(10, "b", 2, 1, NULL);
+    add_symbol(10, "b", 2, 1, 0);
     result = find_symbol("b");
 
-    add_symbol(10, "c", 2, 1, NULL);
+    add_symbol(10, "c", 2, 1, 0);
     result = find_symbol("c");
 
     printf("------- Scope -------\n");
