@@ -388,12 +388,8 @@ char_node *add_lexeme(char *new) {
 
     // firstly advance the pointer through the list
     // if necessary
-    if(p == NULL) {
-        ;
-    } else {
-        while(p->next != NULL) {
-            p = p->next;
-        }
+    while(p != NULL && p->next != NULL) {
+        p = p->next;
     }
     
 
