@@ -15,8 +15,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "headers.h"
-//#include "../lex/lex.daitsch.c"     // contains the constants that we will
-                                    // use to check type;
 
 /******************** String Names Handeling (lexemes) ************************/
 char_node *names = NULL;    // this will contain all the names that are also
