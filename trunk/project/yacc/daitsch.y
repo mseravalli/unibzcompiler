@@ -9,9 +9,7 @@
 
 %union {
     char* lexeme;
-    float floatnum;
-    int   intnum;
-    char   type;
+    int     type;
 	char*   result;
 	char operatorType;
 }
@@ -104,7 +102,6 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
                            } } 
 			| IDENTIFIER ASSIGN Expression {if( find_symbol($1) == -1 ) {
 						             			add_symbol(IDENTIFIER, $1, $<type>0);
-												modify_symbol($1, $3);
 								           } else {
 							                   printf("Error, %s already defined in line %d\n", $1, yyline);
 								               exit(1);
@@ -117,14 +114,13 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
                                            } }
 			| Id_sequence ',' IDENTIFIER ASSIGN Expression{	if( find_symbol($3) == -1 ) {
 						                     				    add_symbol(IDENTIFIER, $3, $<type>0);
-															    modify_symbol($3, $5);
 						                           		    } else {
 							                                    printf("Error, %s already defined in line %d\n", $3, yyline);
 						                              		    exit(1);
 														    } }
             ;
 
-Assignment          : IDENTIFIER ASSIGN Expression {modify_symbol($1, $3);}
+Assignment          : IDENTIFIER ASSIGN Expression {}
                     /*| Declaration ASSIGN Expression*/
                     ;
 

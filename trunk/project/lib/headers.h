@@ -22,8 +22,6 @@ typedef struct sym_node {
     struct sym_node*    next;
     int                 token;
     char_node           *lexeme;
-    float               fval;
-    int                 ival;
     char                type;
 } sym_node;
 
