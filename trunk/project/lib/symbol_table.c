@@ -17,20 +17,48 @@
 #include "headers.h"
 
 /******************** String Names Handeling (lexemes) ************************/
-char_node *names = NULL;    // this will contain all the names that are also
-                            // called lexemes (values of the identifiers)
+char_node       *names = NULL;  // this will contain all the names that are also
+                                // called lexemes (values of the identifiers)
 
 /******************** Actual Symbol Table *************************************/
-sym_node *tbl_head = NULL;          // haad of the symbol table (list imp.)
+//sym_node        *tbl_head = NULL;   // haad of the symbol table (list imp.)
+scope           *actual_scope = NULL;   // the actual scope 
+scope           *main_scope = NULL;     // the main scope (this pointer is
+                                        // never changed otherwise the ref. to
+                                        // the main table is lost.
 
 /******************************************************************************/
-char_node *add_lexeme(char *new);
-void print_lexeme(char_node *start);
+char_node       *add_lexeme(char *new);
+void            print_lexeme(char_node *start);
 
 /******************************************************************************/
-/* */
-sym_node *add_symbol(int token, char *lexeme, char type) {
-    sym_node *p = tbl_head;
+
+/*
+ * this function is intended to create a new scope and the releted
+ * new symbol table when a new scope is found.
+ * the lexeme has to be already in the lexeme structure.
+ */
+scope
+*init_scope(sym_node *parent, char_node *lexeme) {
+    scope *t;      // temporary scope node
+    // new scope
+    t = (scope *)malloc(sizeof(scope *));
+    t->parent;              // the calling symbol node
+    t->lexeme;              // name of the scope
+    t->symtbl = NULL;       // new symbol table
+
+    actual_scope = t;
+    return t;
+}
+
+/*
+ * adding a new symbol into the actual symbol table, that is different
+ * depending on what the actual_scpe global variable is pointing to.
+ */
+sym_node
+*add_symbol(int token, char *lexeme, int line,int type, scope *nscope) {
+    sym_node *p = actual_scope->symtbl; // obtain the head of the actual scope
+                                        // symbol table
     sym_node *t;
 
     // firstly advance the pointer through the list
@@ -43,15 +71,15 @@ sym_node *add_symbol(int token, char *lexeme, char type) {
     t = (sym_node *)malloc(sizeof(sym_node));
     t->token = token;
     t->lexeme = add_lexeme(lexeme);
-    t->fval = DEFAULT_FVAL;
-    t->ival = DEFAULT_IVAL;
+    t->line = line;
     t->type = type;
     t->next = NULL;
 
     // p could be NULL if the symbol table is empty (so is treated
     // as a special case
     if(p == NULL) {
-        tbl_head = t;
+        actual_scope->symtbl = t;       // add directly into the actual
+                                        // scope's symbol table
     } else {
         p->next = t;
     }
@@ -59,7 +87,7 @@ sym_node *add_symbol(int token, char *lexeme, char type) {
     return t;
 }
 
-/* TODO
+/* 
  * the function is intended to find the entry of the symbol
  * table storing the information realted to a specific lexeme.
  * The function returns -1 if the lexeme was not found
@@ -69,13 +97,13 @@ sym_node *add_symbol(int token, char *lexeme, char type) {
  */
 
 int find_symbol(char *lexeme) {
-    sym_node *p = tbl_head;
-    char_node *q        = NULL;
-    char      *r        = lexeme;
-    int       found     = 0;
-    int       i;
-    int       position  = -1;
-    int       str_len   = strlen(lexeme);
+    sym_node    *p        = actual_scope->symtbl;
+    char_node   *q        = NULL;
+    char        *r        = lexeme;
+    int         found     = 0;
+    int         i;
+    int         position  = -1;
+    int         str_len   = strlen(lexeme);
 
     // if the table is empty return a "not found" result
     if(p == NULL) {
@@ -114,14 +142,19 @@ int find_symbol(char *lexeme) {
     }
 }
 
-sym_node *getSymNode(int position){
+/*
+ * obtain the symbol node from the symbol table
+ * given the position (generally obtained using
+ * the find_node above).
+ */
+sym_node *get_node(int position){
 	int i;
 
 	if(position == -1){
 		return NULL;
 	}
 
-	sym_node *p = tbl_head;
+	sym_node *p = actual_scope->symtbl;
 	for(i = 0; i < position; i++ ){
 		p = p->next;
 	}
@@ -132,6 +165,7 @@ sym_node *getSymNode(int position){
 
 // FIXME: non serve in parte questo metodo. Serve solo
 //        inttoreal() per la conversione del tipo
+/*
 int modify_symbol(char* lexeme, char* v) {
     sym_node *p;     // locate the symbol
     char myType;
@@ -182,7 +216,9 @@ int modify_symbol(char* lexeme, char* v) {
 
     return 0;
 }
+*/
 
+/*
 int isCorrectType(char a, char b){
 	if(a == b) {
 		return 1;
@@ -205,22 +241,44 @@ int isCorrectType(char a, char b){
 		return 0;
 	}
 }
+*/
 
+/*
+ * prints the infos of a scope 
+ */
+void print_scope() {
+    scope *p = actual_scope;
 
-/* */
+    if(p == NULL) {
+        printf("-- scope empty --\n");
+    } else {
+        printf("-- parent: %p", p->parent);
+        printf(" lexeme: ");
+        print_lexeme(p->lexeme);
+        printf(" symbol table: %p", p->symtbl);
+        printf("\n");
+    }
+    printf("\n");
+}
+
+/*
+ * prints the complete symbol table (also their scopes)
+ * TODO: not printing scopse but only the actual scope's
+ *       symbol table.
+ */
 void print_symbols() {
-    sym_node *p = tbl_head;
+    sym_node *p = actual_scope->symtbl;
 
     if(p == NULL) {
         printf("-- symbol tabel empty --\n");
     } else {
         while(p != NULL) {
             printf("-- token: %d", p->token);
-            printf(" lexeme ");
+            printf(" lexeme: ");
             print_lexeme(p->lexeme);
-            printf(" ival %d", p->ival);
-            printf(" fval %f", p->fval);
-            printf(" type %c", p->type);
+            printf(" line: %d", p->line);
+            printf(" type: %d", p->type);
+            printf(" scope: %p", p->nscope);
             printf("\n");
             p = p->next;
         }
@@ -316,6 +374,7 @@ void print_lexeme(char_node *start) {
     }
 }
 
+/*
 char* bool_compare (char* a, char* b, char op){
 	
 	int valA = 0;
@@ -376,9 +435,11 @@ char* bool_compare (char* a, char* b, char op){
 			break;
 	}
 }
+*/
 
 // FIXME: utile, ma non con i char (itoa e ftoa vanno
 //        rimossi)
+/*
 char* num_compare (char* a, char* b, char op){
 	float valA = 0;
 	float valB = 0;
@@ -440,10 +501,12 @@ char* num_compare (char* a, char* b, char op){
 			break;
 	}
 }
+*/
 
 // FIXME: da modificare; questo deve diventare
 //        tipo "emit" che si trova negli esempi delle
 //        slide
+/*
 char* calculate (char* a, char* b, char op){
 	float valA = 0;
 	float valB = 0;
@@ -507,24 +570,9 @@ char* calculate (char* a, char* b, char op){
 			break;
 	}
 }
+*/
 
-// FIXME: da rimuovere
-char* itoa (int i){
-	char* buffer = (char*) malloc (30); 
-	sprintf (buffer,"%d",i);	
-	return buffer;
-}
-
-
-// FIXME: da rimuovere
-char* ftoa (float f){
-	char* buffer = (char*) malloc (30); 
-	sprintf (buffer,"%f",f);
-	return buffer;
-}
-
-
-//int main() {
+int main() {
 // --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
 //
@@ -539,24 +587,28 @@ char* ftoa (float f){
 // --- END ---
 
 // --- PER TESTARE LA SYMBOL TABLE ---
-//    int result;
-//    printf("------- Sym Table -------\n");
-//    print_symbols();
-//
-//    add_symbol(10, "a", 1);
-//    result = find_symbol("a");
-//    printf("result: %d\n", result);
-//
-//    print_symbols();
-//    add_symbol(10, "b", 2);
-//    result = find_symbol("b");
-//    printf("result: %d\n", result);
-//
-//    add_symbol(10, "c", 2);
-//    result = find_symbol("c");
-//    printf("result: %d\n", result);
-//
-//    print_symbols();
+    int result;
+
+    char_node *tmp = add_lexeme("main");  // add the name in the lexemes' list
+    main_scope = init_scope(NULL, tmp);   // initialize the scope
+    actual_scope = main_scope;            // keep track of the actual scope
+    free(tmp);
+
+
+
+    add_symbol(10, "a", 1, 1, NULL);
+    result = find_symbol("a");
+
+    add_symbol(10, "b", 2, 1, NULL);
+    result = find_symbol("b");
+
+    add_symbol(10, "c", 2, 1, NULL);
+    result = find_symbol("c");
+
+    printf("------- Scope -------\n");
+    print_scope();
+    printf("------- Sym Table -------\n");
+    print_symbols();
 // --- END ---
-//    return 0;
-//}
+    return 0;
+}
