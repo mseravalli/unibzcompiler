@@ -43,6 +43,7 @@ i = 0;
 %type <result> Arith_expression
 %type <result> T
 %type <result> F
+%type <result> Condition
 
 %type <operatorType> Relop
 %type <operatorType> Addop
@@ -51,7 +52,7 @@ i = 0;
 %start Scope
 %%
 
-Scope               : Marker Main
+Scope               : Marker Main               {/*print_symbols();*/}
                     ;
 
 Marker              : /* emty */                {init();}
@@ -117,20 +118,22 @@ Assignment          : IDENTIFIER ASSIGN Expression { printf("%s isch %s\n", $1, 
                     /*| Declaration ASSIGN Expression*/
                     ;
 
-Condition           : Bool_expression
+Condition           : Bool_expression { char *e = (char *)malloc(100*sizeof(char));
+                                        sprintf(e, "if %s goto _\ngoto _", $1);
+                                        $$ = e;}
                     ;
 
 Ending              : Statements DONE;
 
-Conditional         : IF '[' Condition ']' THEN Ending
-                    | IF '[' Condition ']' THEN Statements Else ELSE Ending
+Conditional         : IF '[' Condition ']' THEN Ending   {printf("%s\n", $3);}
+                    | IF '[' Condition ']' THEN Statements Else ELSE Ending {printf("%s\n", $3);}
                     ;
 
 Else                : /* empty */
-                    | ELIF '[' Condition ']' THEN Statements Else
+                    | ELIF '[' Condition ']' THEN Statements Else {printf("%s\n", $3);}
                     ;
 
-Whileloop           : WHILE '[' Condition ']' DO Ending
+Whileloop           : WHILE '[' Condition ']' DO Ending {printf("_: %s\n_: \ngoto _\n", $3);}
                     ;
 
 Expression 			: Bool_expression
@@ -142,7 +145,7 @@ Relop				: EQUALS {$$ = '=';}
 					| '>'  {$$ = '>';}
 					;
 
-Bool_expression : Bool_expression ODER Bool_And_Expr {$$ = ""/*bool_compare($1, $3, '|')*/; 
+Bool_expression : Bool_expression ODER Bool_And_Expr {$$ = ""; 
 int num = i++; 
 char* e = malloc(10*sizeof(char)); 
 sprintf(e, "e%d", num);
