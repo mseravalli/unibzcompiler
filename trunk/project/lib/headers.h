@@ -10,6 +10,8 @@
  *                                                                            *
  ******************************************************************************/
 
+int i;  // index for incrementing temporary variables
+
 /* each character of a lexeme till and of string */
 typedef struct char_node {
     char a;                 // character of the string (EOS == '\0')

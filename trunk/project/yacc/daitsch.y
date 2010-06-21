@@ -5,13 +5,15 @@
 #include <stdio.h>
 #include "../lib/headers.h"
 #include "../lib/utilities.h"
+
+i = 0;
 %}
 
 %union {
     char    *lexeme;
+    float   floatnum;
+    int     intnum;
     int     type;
-    char    *intnum;
-    char    *floatnum;
 	char*   result;
 	char operatorType;
 }
@@ -46,12 +48,10 @@
 %type <operatorType> Addop
 %type <operatorType> Multop
 
-
-
 %start Scope
 %%
 
-Scope               : Marker Main               {print_symbols();}
+Scope               : Marker Main
                     ;
 
 Marker              : /* emty */                {init();}
@@ -70,33 +70,37 @@ Statements          : /* empty */
                     ;
 
 Declaration
-    : INT { $<type>$ = 1001; } Id_sequence
-    | FLOAT { $<type>$ = 1002; } Id_sequence
-    | BOOL { $<type>$ = 1003; } Id_sequence
+    : INT { $<type>$ = 'i'; } Id_sequence
+    | FLOAT { $<type>$ = 'f'; } Id_sequence
+    | BOOL { $<type>$ = 'b'; } Id_sequence
     ;
 
 /* In this rule $0 is accessible directly as there is no other */
 /* reduction of any other rules occur before the semantic action is */
 /* reduced. */ 
-Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
+Id_sequence : IDENTIFIER { printf("%s := 0\n" , $1);
+                           if( find_symbol($1) == -1 ) {
                                add_symbol(IDENTIFIER, $1, yyline, $<type>0, 0);
                            } else {
-							printf("Error, %s already defined in line %d\n", $1, yyline);
+							   printf("Error, %s already defined in line %d\n", $1, yyline);
                                exit(1);
                            } } 
-			| IDENTIFIER ASSIGN Expression {if( find_symbol($1) == -1 ) {
+			| IDENTIFIER ASSIGN Expression { printf("%s := %s\n", $1, $3);
+                                            if( find_symbol($1) == -1 ) {
 						             			add_symbol(IDENTIFIER, $1, yyline, $<type>0, 0);
-								           } else {
+								            } else {
 							                   printf("Error, %s already defined in line %d\n", $1, yyline);
 								               exit(1);
 								           } } 
-            | Id_sequence ',' IDENTIFIER { if( find_symbol($3) == -1 ) {
+            | Id_sequence ',' IDENTIFIER { printf("%s := 0\n" , $3);
+                                           if( find_symbol($3) == -1 ) {
                                                add_symbol(IDENTIFIER, $3, yyline, $<type>0, 0);
                                            } else {
 							                   printf("Error, %s already defined in line %d\n", $3, yyline);
                                                exit(1);
                                            } }
-			| Id_sequence ',' IDENTIFIER ASSIGN Expression{	if( find_symbol($3) == -1 ) {
+			| Id_sequence ',' IDENTIFIER ASSIGN Expression{ printf("%s := %s\n", $3, $5);
+                                                         	if( find_symbol($3) == -1 ) {
 						                     				    add_symbol(IDENTIFIER, $3, yyline, $<type>0, 0);
 						                           		    } else {
 							                                    printf("Error, %s already defined in line %d\n", $3, yyline);
@@ -104,7 +108,7 @@ Id_sequence : IDENTIFIER { if( find_symbol($1) == -1 ) {
 														    } }
             ;
 
-Assignment          : IDENTIFIER ASSIGN Expression {}
+Assignment          : IDENTIFIER ASSIGN Expression { printf("%s isch %s\n", $1, $3);}
                     /*| Declaration ASSIGN Expression*/
                     ;
 
@@ -133,41 +137,84 @@ Relop				: EQUALS {$$ = '=';}
 					| '>'  {$$ = '>';}
 					;
 
-Bool_expression		: Bool_expression ODER Bool_And_Expr {/*$$ = bool_compare($1, $3, '|');*/}
-					| Bool_And_Expr {$$ = $1;}
-					;
+Bool_expression : Bool_expression ODER Bool_And_Expr {$$ = ""/*bool_compare($1, $3, '|')*/; 
+int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "e%d", num);
+$$ = e; 
+printf("e%d := %s || %s\n",num,$1,$3); }
+| Bool_And_Expr {$$ = $1;}
+;
 
-Bool_And_Expr		: Bool_And_Expr UND Bool_Not_Expr {/*$$ = bool_compare($1, $3, '&');*/}
-					| Bool_Not_Expr {$$ = $1;}
-					;
+Bool_And_Expr : Bool_And_Expr UND Bool_Not_Expr {$$ = ""/*bool_compare($1, $3, '&')*/;int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "e%d", num);
+$$ = e ; 
+printf("e%d := %s && %s\n",num,$1,$3); }
+| Bool_Not_Expr {$$ = $1;}
+;
 
-Bool_Not_Expr		: NET Preposition {/*$$ = bool_compare($2, NULL, '!');*/}
-					| Preposition {$$ = $1;}
-					| NET Rel_Expr {$$ = $2;}
-					| Rel_Expr {$$ = $1;}
-					;
+Bool_Not_Expr : NET Preposition {$$ = ""/*bool_compare($2, NULL, '!')*/;int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "e%d", num);
+$$ = e; 
+printf("e%d := NOT %s\n",num, $2); }
+| Preposition {$$ = $1;}
+| NET Rel_Expr {$$ = $2;}
+| Rel_Expr {$$ = $1;}
+;
 
-Preposition			: TRUE {$$ = "1";}
-					| FALSE {$$ = "0";}
-					| '[' Bool_expression ']' {$$ = $2;}
-					;
+Preposition : TRUE { int num = i++;
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "temp%d", num);
+$$ = e; 
+printf("temp%d := 1\n", num);}
 
-Rel_Expr			: Rel_Expr Relop Arith_expression {/*$$ = num_compare($1, $3, $2);*/ }
-					| Arith_expression {$$ = $1;}
-					;
+| FALSE { int num = i++;
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "temp%d", num);
+$$ = e; 
+printf("temp%d := 0\n", num);}
 
-Arith_expression    : Arith_expression Addop T {/*$$ = calculate($1, $3, $2);*/}
+| '[' Bool_expression ']' {$$ = $2;}
+;
+
+Rel_Expr : Rel_Expr Relop Arith_expression  {int num = i++; 
+char* e = malloc(10*sizeof(char));
+sprintf(e, "e%d", num);
+$$ = e /*calculate($1, $3, $2)*/; 
+printf("e%d := %s %c %s\n",num,$1,$2,$3);}
+| Arith_expression {$$ = $1;}
+;
+
+Arith_expression    : Arith_expression Addop T {int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "e%d", num);
+$$ = e /*calculate($1, $3, $2)*/; 
+printf("e%d := %s %c %s\n",num,$1,$2,$3);}
                     | T {$$ = $1;}
                     ;
 
-T                   : T Multop F {/*$$ = calculate($1, $3, $2);*/}
+T                   : T Multop F { int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "t%d", num);
+$$ = e/*calculate($1, $3, $2)*/; 
+printf("t%d := %s %c %s\n", num,$1, $2, $3);}
                     | F {$$ = $1;}
                     ;
 
 F                   : '(' Arith_expression ')' {$$ = $2;}
                     | IDENTIFIER {$$ = $1;}
-                    | INT_NUM { $$ = $1; }
-					| FLOAT_NUM {$$ = $1; }
+                    | INT_NUM { int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "temp%d", num);
+$$ = e;
+printf("temp%d := %d\n", num, $1);}
+                    | FLOAT_NUM { int num = i++; 
+char* e = malloc(10*sizeof(char)); 
+sprintf(e, "temp%d", num);
+$$ = e;
+printf("temp%d := %f\n", num, $1);}
                     ;
 
 Addop               : '+' {$$ = '+';}
