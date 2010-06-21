@@ -67,13 +67,18 @@ Statements          : /* empty */
                     | Statements Assignment SEMICOL
                     | Statements Conditional
                     | Statements Whileloop
+                    | Statements Marker2 Main           {exit_scope();}
                     ;
 
-Declaration
-    : INT { $<type>$ = 'i'; } Id_sequence
-    | FLOAT { $<type>$ = 'f'; } Id_sequence
-    | BOOL { $<type>$ = 'b'; } Id_sequence
-    ;
+Marker2             : /* empty */                       { char* e = (char *)malloc(10*sizeof(char));
+                                                          sprintf(e, "scope%d", i);
+                                                          add_symbol(IDENTIFIER, e, yyline, 'v', 1);}
+                    ;
+
+Declaration         : INT { $<type>$ = 'i'; } Id_sequence
+                    | FLOAT { $<type>$ = 'f'; } Id_sequence
+                    | BOOL { $<type>$ = 'b'; } Id_sequence
+                    ;
 
 /* In this rule $0 is accessible directly as there is no other */
 /* reduction of any other rules occur before the semantic action is */

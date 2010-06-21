@@ -15,13 +15,29 @@ hallo
 	solong [folsch und [richtig oder folsch]] tua
 	passt
 
-	wenn [ 1 > (3+2)] nor
-		wenn [richtig] nor
-		passt
+    hallo
+        ganz a;
 
-		wenn [net richtig] nor
-		passt
-	passt
+        wenn [ 1 > (3+2)] nor
+            wenn [richtig] nor
+            passt
+
+            wenn [net richtig] nor
+            passt
+        passt
+    pfiati
+
+    hallo
+        ganz a;
+
+        wenn [ 1 > (3+2)] nor
+            wenn [richtig] nor
+            passt
+
+            wenn [net richtig] nor
+            passt
+        passt
+    pfiati
 
 	wenn [ richtig und folsch ] nor
 	sunscht
