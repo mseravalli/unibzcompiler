@@ -104,10 +104,10 @@ IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
 {MULTIC} { /* discared comments */ }
 
 {SEMICOL}   { return SEMICOL; }
-{FLOAT_NUM} { yylval.floatnum = strdup(yytext);
+{FLOAT_NUM} { yylval.floatnum = atof(yytext);
               return FLOAT_NUM; }
 
-{INT_NUM}   { yylval.intnum = strdup(yytext);
+{INT_NUM}   { yylval.intnum = atoi(yytext);
               return INT_NUM; }
 
 {IDENTIFIER} { yylval.lexeme = strdup(yytext);
