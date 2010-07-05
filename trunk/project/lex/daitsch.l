@@ -33,83 +33,89 @@ DO tua
 DONE passt
 
 /****************************** Types *****************************************/
-INT ganz
+INT gonz
 FLOAT genau
 BOOL bool
 VOID nichts
 
-/****************************** Relational operators *****************************************/
-NET net
-UND und
-ODER oder
+/********************************* Operators & basic tipes ***********************************/
+NOT net
+AND und
+OR oder
 TRUE richtig
 FALSE folsch
-EQUALS gleich
 
-INT_NUM "-"*{DIGIT}*
-FLOAT_NUM "-"*{DIGIT}+"."{DIGIT}+
+EQ gleich
+BG greaser
+SM kloner
+EQBG "greaser gleich"
+EQSM "kloner gleich"
+
+INTNUM "-"?{DIGIT}+
+FLOATNUM "-"?{DIGIT}+"."{DIGIT}+
 
 /* C-others */
 STRING \".*\"
-IDENTIFIER {LETTER}({LETTER}|{DIGIT}|[_-])*
+ID {LETTER}({LETTER}|{DIGIT}|[_-])*
 %%
 
-[ \t] { /* discarded characters */ }
-[\n] { /* each time a new value line is found increment
-          the line counter */ yyline++; }
+[ \t]       { /* discarded characters (tab and space) */ }
+[\n]        { /* each time a new value line is found increment
+              the line counter */ yyline++; }
 
-{START} { return START; }
-{END} { return END; }
+{START}     { return START; }
+{END}       { return END; }
 
-{ASSIGN} { return ASSIGN; }
+{ASSIGN}    { return ASSIGN; }
 
-{IF} { return IF; }
-{THEN} { return THEN; }
-{ELIF} { return ELIF; }
-{ELSE} { return ELSE; }
+{IF}        { return IF; }
+{THEN}      { return THEN; }
+{ELIF}      { return ELIF; }
+{ELSE}      { return ELSE; }
 
-{WHILE} { return WHILE; }
-{DO} { return DO; }
-{DONE} { return DONE; }
+{WHILE}     { return WHILE; }
+{DO}        { return DO; }
+{DONE}      { return DONE; }
 
-{INT} { return INT; }
-{FLOAT} { return FLOAT; }
-{BOOL} { return BOOL; }
-{VOID} { return VOID; }
+{INT}       { return INT; }
+{FLOAT}     { return FLOAT; }
+{BOOL}      { return BOOL; }
+{VOID}      { return VOID; }
 
-{NET} { return NET; }
-{UND} { return UND; }
-{ODER} { return ODER; } 
+{NOT}       { return NOT; }
+{AND}       { return AND; }
+{OR}        { return OR; } 
 
-{EQUALS} { return EQUALS; }
+{TRUE}      { return TRUE; } 
+{FALSE}     { return FALSE; } 
 
-{TRUE} { return TRUE; } 
-{FALSE} { return FALSE; } 
+"+"         { return '+'; }
+"-"         { return '-'; }
+"*"         { return '*'; }
+"/"         { return '/'; }
 
-"+" { return '+'; }
-"-" { return '-'; }
-"*" { return '*'; }
-"/" { return '/'; }
+{EQ}        { return EQ; }
+{BG}        { return BG; }
+{SM}        { return SM; }
+{EQBG}      { return EQBG; }
+{EQSM}      { return EQSM; }
 
-"<" { return '<'; }
-">" { return '>'; }
+"("         { return '('; }
+")"         { return ')'; }
+"["         { return '['; }
+"]"         { return ']'; }
+","         { return ','; }
 
-"(" { return '('; }
-")" { return ')'; }
-"[" { return '['; }
-"]" { return ']'; }
-"," { return ','; }
-
-{ONEC} { /* discared comments */ }
-{MULTIC} { /* discared comments */ }
+{ONEC}      { /* discared comments */ }
+{MULTIC}    { /* discared comments */ }
 
 {SEMICOL}   { return SEMICOL; }
-{FLOAT_NUM} { yylval.floatnum = atof(yytext);
-              return FLOAT_NUM; }
+{FLOATNUM}  { yylval.floatnum = atof(yytext);
+              return FLOATNUM; }
 
-{INT_NUM}   { yylval.intnum = atoi(yytext);
-              return INT_NUM; }
+{INTNUM}    { yylval.intnum = atoi(yytext);
+              return INTNUM; }
 
-{IDENTIFIER} { yylval.lexeme = strdup(yytext);
-               return IDENTIFIER; }
+{ID}        { yylval.lexeme = strdup(yytext);
+              return ID; }
 %%

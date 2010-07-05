@@ -1,14 +1,17 @@
 hallo
-	bool a isch [3 < (-3+2) oder richtig];
-	ganz b isch 2, c isch 3;
-	ganz d isch 2;
+	bool a isch [3 kloner (-3+2) oder richtig];
+	gonz b isch 2, c isch 3;
+	gonz d isch 2;
 	genau e;
+	genau y;
+	genau z;
 
 
 	d isch a + 2;
 
+    y isch 2;
 
-	ganz f isch a;
+	gonz f isch a;
 
 	e isch a + f + 0.1;
 
@@ -16,8 +19,12 @@ hallo
 	passt
 
     hallo
-        ganz a;
-        wenn [ 1 > (3+2)] nor
+        genau a;
+        a isch 1;
+        d isch 1;
+        z isch 2;
+
+        wenn [ 1 greaser gleich (3+2)] nor
             wenn [richtig] nor
             passt
 
@@ -27,9 +34,9 @@ hallo
     pfiati
 
     hallo
-        ganz a;
+        gonz a;
 
-        wenn [ 1 > (3+2)] nor
+        wenn [ 1 greaser (3+2)] nor
             wenn [richtig] nor
             passt
 
@@ -38,7 +45,6 @@ hallo
         passt
     pfiati
 
-    ganz z;
 	wenn [ richtig und folsch ] nor
 	sunscht
 	passt

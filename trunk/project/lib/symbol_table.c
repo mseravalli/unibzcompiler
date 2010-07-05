@@ -32,6 +32,7 @@ scope           *main_scope = NULL;     // the main scope (this pointer is
 /******************************************************************************/
 char_node       *add_lexeme(char *new);
 void            print_lexeme(char_node *start);
+sym_node        *search_table(char *lexeme, sym_node *tbl);
 
 /******************************************************************************/
 
@@ -47,6 +48,7 @@ init() {
     actual_scope = main_scope;              // keep track of the actual scope
     free(tmp);
 }
+
 /*
  * this function is intended to create a new scope and the releted
  * new symbol table when a new scope is found.
@@ -63,6 +65,15 @@ scope
 
     actual_scope = t;
     return t;
+}
+
+/*
+ * returns the pointer to the symbol table of the 
+ * actual scope.
+ */
+scope
+*this_scope() {
+    return actual_scope;
 }
 
 /*
@@ -149,33 +160,29 @@ sym_node
     return t;
 }
 
-/* 
- * the function is intended to find the entry of the symbol
- * table storing the information realted to a specific lexeme.
- * The function returns -1 if the lexeme was not found
- * in the symbol table otherwise it will return the index
- * the entry (0, first postion; 1, second position and so
- * on);
+/*
+ * search a specific symbol table
  */
-
-int find_symbol(char *lexeme) {
-    sym_node    *p        = actual_scope->symtbl;
+sym_node 
+*search_table(char *lexeme, sym_node *tbl) {
+    sym_node    *p        = tbl;
+    sym_node    *result   = NULL;
     char_node   *q        = NULL;
     char        *r        = lexeme;
     int         found     = 0;
     int         i;
-    int         position  = -1;
+    //int         position  = -1;
     int         str_len   = strlen(lexeme);
 
     // if the table is empty return a "not found" result
     if(p == NULL) {
-       return -1;
+       return result;
     }
 
     // differently start to check the presence of it
     // in the symbol table
     while(p != NULL && found == 0 ) {
-        position++;     // step forward
+        //position++;     // step forward
         q = p->lexeme;
 
         // start to compare lexemes
@@ -190,18 +197,54 @@ int find_symbol(char *lexeme) {
             i++;
         }
 
-        if ( !(q->a != '\0' || i != (str_len-1)) ) {
+        if ( !(q->a != '\0' || i != (str_len - 1)) ) {
+            result = p;
             found = 1;
         }
 
         p = p->next;
     }
 
-    if(found == 1) {
-        return position;
-    } else {
-        return -1;
+    return result;
+}
+
+/* 
+ * the function is intended to find the entry of the symbol
+ * table stored in the actual scope or in one of the enclosing one.
+ * Considering the shape of the symbol table, thi function traverses
+ * the nasted symbols from the current scope up to the main one.
+ */
+void
+find_symbol(char *lexeme, sym_node **node, scope **actual) {
+    scope       *s        = actual_scope;  // actual scope pointer
+    sym_node    *p        = NULL;
+    sym_node    *found    = NULL;          // resulting pointer, that
+                                           // points to the searched element
+
+    // main loop for traversing the entire symbol table
+    // ("busy wating" implementation).
+    while (1) {
+        if(s->parent != NULL) {
+            p = s->symtbl;
+            // search for the element
+            found = search_table(lexeme, p);
+            if(found == NULL) {
+                s = s->parent;
+            } else {
+                break;
+            }
+        } else {
+            // we have reached the main scope so after finishing
+            // searching we can exit from the loop also if we didn't
+            // find the searched element
+            p = s->symtbl;
+            found = search_table(lexeme, p);
+            break;
+        }
     }
+
+    *node = found;
+    *actual = s;
 }
 
 /*
@@ -224,86 +267,6 @@ sym_node *get_node(int position){
 	return p;
 }
 
-
-// FIXME: non serve in parte questo metodo. Serve solo
-//        inttoreal() per la conversione del tipo
-/*
-int modify_symbol(char* lexeme, char* v) {
-    sym_node *p;     // locate the symbol
-    char myType;
-
-	float val;
-	
-	if(isdigit(v[0]) || v[0] == '-'){
-		val = atof(v);
-	}
-	//if v is a lexeme
-	else {
-		sym_node *p = NULL;
-		if(getSymNode(find_symbol(v)) != NULL){
-			p = getSymNode(find_symbol(v));
-			val = p->fval;
-		} else {
-			printf("error: %s never declared\n", v);
-			return 1;
-		}
-	}
-
-
-	p = getSymNode(find_symbol(lexeme));
-
-    // determinate if we have a float or an int and whether
-    // it correspondes to our type
-    if((val - (int) val) == 0 ){
-        myType = 'i';
-	}
-    else
-        myType = 'f';
-
-
-	if(val == 0 || val == 1)
-		myType = 'b';
-
-	//type check
-	if( !isCorrectType(p->type, myType) ){
-		return 1;
-	}
-    //change the symbol
-    if(p->type == 'i' || p->type == 'b'){
-        p->ival = (int) val;
-		p->fval = (int) val;
-	}
-    else if (p->type == 'f')
-        p->fval = val;
-
-    return 0;
-}
-*/
-
-/*
-int isCorrectType(char a, char b){
-	if(a == b) {
-		return 1;
-	}
-
-	switch (a) {
-
-	case 'i':
-		if(b != 'f')
-			return 1;
-		else
-			return 0;
-	case 'f':
-		return 1;
-
-	case 'b':
-		return 0;
-
-	default:
-		return 0;
-	}
-}
-*/
 
 /*
  * prints the infos of the current scope 
@@ -363,9 +326,9 @@ print_symbols() {
  * lexeme.
  *
  * example:
- *   ________________________
- *  |f|i|s|t|EOS|s|e|c|o|n|d| but implemented as a list
- *   ------------------------
+ *   ___________________________
+ *  |f|i|s|t|EOS|s|e|c|o|n|d|EOS| but implemented as a list
+ *   ---------------------------
  *
  */
 char_node *add_lexeme(char *new) {
@@ -439,206 +402,9 @@ void print_lexeme(char_node *start) {
     }
 }
 
-/*
-char* bool_compare (char* a, char* b, char op){
-	
-	int valA = 0;
-	int valB = 0;
 
-	if(a != NULL){
-		//if a is a number or a result
-		if(isdigit(a[0]) || a[0] == '-'){
-			valA = atoi(a);
-		}
-		//if a is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(a)) != NULL){
-				p = getSymNode(find_symbol(a));
-				valA = p->ival;
-			} else {
-				printf("error: %s never declared\n", a);
-				return NULL;
-			}
-			
-		}
-	}
-
-	if(b != NULL){
-		//if b is a number or a result
-		if(isdigit(b[0]) || b[0] == '-'){
-			valB = atoi(b);
-		}
-		//if b is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(b)) != NULL){
-				p = getSymNode(find_symbol(b));
-				valB = p->ival;
-			} else {
-				printf("error: %s never declared\n", b);
-				return NULL;
-			}
-		}
-	}
-
-	switch (op) {
-		//OR operation
-		case '|':
-			return itoa(valA || valB);
-			break;
-		//AND operation
-		case '&':
-			return itoa(valA && valB);
-			break;
-		//NOT operation
-		case '!':
-			return itoa(!valA);
-			break;
-		default:
-			return NULL;
-			break;
-	}
-}
-*/
-
-// FIXME: utile, ma non con i char (itoa e ftoa vanno
-//        rimossi)
-/*
-char* num_compare (char* a, char* b, char op){
-	float valA = 0;
-	float valB = 0;
-
-	if(a != NULL){
-		//if a is a number or a result
-		if(isdigit(a[0]) || a[0] == '-'){
-			valA = atof(a);
-		}
-		//if a is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(a)) != NULL){
-				p = getSymNode(find_symbol(a));
-				valA = p->fval;
-			} else {
-				printf("error: %s never declared\n", a);
-				return NULL;
-			}
-		}
-	}
-
-	if(b != NULL){
-		//if b is a number or a result
-		if(isdigit(b[0]) || b[0] == '-'){
-			valB = atof(b);
-		}
-		//if b is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(b)) != NULL){
-				p = getSymNode(find_symbol(b));
-				valB = p->fval;
-			} else {
-				printf("error: %s never declared\n", b);
-				return NULL;
-			}
-		}
-	}
-
-	//printf("rel comparing %s %c %s ", a, op, b);
-	//printf("where %s = %f and %s = %f \n", a, valA, b, valB);
-
-	switch (op) {
-		//EQUALS operation
-		case '=':
-			return itoa(valA == valB);
-			break;
-		//LESS THAN operation
-		case '<':
-			return itoa(valA < valB);
-			break;
-		//GREATER THAN operation
-		case '>':
-			return itoa(valA > valB);
-			break;
-		default:
-			return NULL;
-			break;
-	}
-}
-*/
-
-// FIXME: da modificare; questo deve diventare
-//        tipo "emit" che si trova negli esempi delle
-//        slide
-/*
-char* calculate (char* a, char* b, char op){
-	float valA = 0;
-	float valB = 0;
-
-	if(a != NULL){
-		//if a is a number or a result
-		if(isdigit(a[0]) || a[0] == '-'){
-			valA = atof(a);
-		}
-		//if a is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(a)) != NULL){
-				p = getSymNode(find_symbol(a));
-				valA = p->fval;
-			} else {
-				printf("error: %s never declared\n", a);
-				return NULL;
-			}
-		}
-	}
-
-	
-	if(b != NULL){
-		//if b is a number or a result
-		if(isdigit(b[0]) || b[0] == '-'){
-			valB = atof(b);
-		}
-		//if b is a lexeme
-		else {
-			sym_node *p = NULL;
-			if(getSymNode(find_symbol(b)) != NULL){
-				p = getSymNode(find_symbol(b));
-				valB = p->fval;
-			} else {
-				printf("error: %s never declared\n", b);
-				return NULL;
-			}
-		}
-	}
-
-	switch (op) {
-		//SUM
-		case '+':
-			return ftoa(valA + valB);
-			break;
-		//SUBTRACTION
-		case '-':
-			return ftoa(valA + valB);
-			break;
-		//MULTIPLICATION
-		case '*':
-			return ftoa(valA * valB);
-			break;
-		//DIVISION
-		case '/':
-			return ftoa(valA / valB);
-			break;
-		default:
-			return NULL;
-			break;
-	}
-}
-*/
-
+// --- TEST GESTIONE DEI LEXEMES ---
 //int main() {
-// --- PER SOLO LA GESTIONE DEI LEXEMES ---
 //    char_node *first, *second;
 //
 //    first = add_lexeme("qualche dubbio");
@@ -649,39 +415,68 @@ char* calculate (char* a, char* b, char op){
 //    printf("\n");
 //    print_lexeme(second);
 //    printf("\n");
+//
+//    return 0;
+//}
 // --- END ---
+
 // --- PER TESTARE LA SYMBOL TABLE ---
-//    int result;
+//int main() {
+//    sym_node *r = NULL;
+//    scope *s = NULL;
 //
 //    char_node *tmp = add_lexeme("main");  // add the name in the lexemes' list
 //    main_scope = init_scope(NULL, tmp);   // initialize the scope
 //    actual_scope = main_scope;            // keep track of the actual scope
 //    free(tmp);
 //
+//    // --- PRIMO SCOPE ---
+//    find_symbol("a", &r, &s);
+//    printf("\tresult 'a': %p; scope: %p\n", r, s);
 //    add_symbol(10, "a", 1, 1, 0);
-//    result = find_symbol("a");
-//
+//    find_symbol("a", &r, &s);
+//    printf("\tresult 'a': %p; scope: %p\n", r, s);
 //    add_symbol(10, "b", 2, 1, 0);
-//    result = find_symbol("b");
-//
+//    find_symbol("b", &r, &s);
+//    printf("\tresult 'b': %p; scope: %p\n", r, s);
 //    add_symbol(10, "c", 2, 1, 0);
-//    result = find_symbol("c");
+//    find_symbol("c", &r, &s);
+//    printf("\tresult 'c': %p; scope: %p\n", r, s);
+//    print_scope();
+//    print_symbols();
+//    // --- FINE PRIMO SCOPE ---
+//    printf("\n ====== \n");
 //
+//    // --- SECONDO SCOPE ---
 //    add_symbol(10, "scope1", 2, 1, 1);
-//    result = find_symbol("c");
-//
+//    find_symbol("c", &r, &s);
+//    printf("\tresult 'c': %p; scope: %p\n", r, s);
+//    print_scope();
+//    print_symbols();
 //    exit_scope();
+//    printf("\n ====== \n");
+//    // --- FILE SECONDO SCOPE ---
 //
+//    // --- TERZO SCOPE ---
 //    add_symbol(10, "scope2", 2, 1, 1);
-//    result = find_symbol("c");
-//
+//    find_symbol("c", &r, &s);
+//    printf("\tresult 'c': %p; scope: %p\n", r, s);
 //    add_symbol(10, "b", 2, 1, 0);
-//    result = find_symbol("b");
-//
+//    find_symbol("b", &r, &s);
+//    printf("\tresult 'b': %p; scope: %p\n", r, s);
 //    add_symbol(10, "c", 2, 1, 0);
-//    result = find_symbol("c");
-//    
+//    find_symbol("c", &r, &s);
+//    printf("\tresult 'c': %p; scope: %p\n", r, s);
+//    print_scope();
+//    print_symbols();
 //    exit_scope();
-// --- END ---
+//    printf("\n ====== \n");
+//    // --- FINE TERZO SCOPE ---
+//
+//    // --- PRIMO SCOPE ---
+//    print_scope();
+//    print_symbols();
+//    // --- FINE PRIMO SCOPE ---
 //    return 0;
 //}
+// --- END ---
