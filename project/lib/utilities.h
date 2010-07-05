@@ -11,3 +11,5 @@
  ******************************************************************************/
 
 int yyline = 1;             // used for reporting the current line number
+int i = 0;                  // index used for incrementing the name of the
+                            // temporary variables (like tmp1, tmp2, ..)

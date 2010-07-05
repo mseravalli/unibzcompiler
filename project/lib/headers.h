@@ -10,8 +10,6 @@
  *                                                                            *
  ******************************************************************************/
 
-int i;  // index for incrementing temporary variables
-
 /* each character of a lexeme till and of string */
 typedef struct char_node {
     char a;                 // character of the string (EOS == '\0')
@@ -46,7 +44,8 @@ int         exit_scope();
 char_node   *generate_scope_name();
 sym_node    *add_symbol(int token, char *lexeme, int line,int type, int is_scope);
 //int         isCorrectType(char a, char b);
-int         find_symbol(char *lexeme);
+void        find_symbol(char *lexeme, sym_node **node, scope **actual);
+scope       *this_scope(void);
 //sym_node    *get_node(int position);
 void        print_symbols();
 void        print_scope();
